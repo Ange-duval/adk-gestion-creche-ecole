@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_adk_presence_list" model="ir.ui.view">
+        <field name="name">adk.presence.list</field>
+        <field name="model">adk.presence</field>
+        <field name="arch" type="xml">
+            <list string="Présences" editable="bottom"
+                  decoration-danger="statut=='absent'" decoration-warning="statut=='retard'">
+                <field name="date"/>
+                <field name="eleve_id"/>
+                <field name="classe_id"/>
+                <field name="statut"/>
+                <field name="mode_saisie"/>
+                <field name="motif"/>
+                <field name="notification_envoyee"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_adk_presence_search" model="ir.ui.view">
+        <field name="name">adk.presence.search</field>
+        <field name="model">adk.presence</field>
+        <field name="arch" type="xml">
+            <search string="Rechercher une présence">
+                <field name="eleve_id"/>
+                <field name="classe_id"/>
+                <filter string="Aujourd'hui" name="today" domain="[('date','=',context_today().strftime('%Y-%m-%d'))]"/>
+                <filter string="Absents" name="absents" domain="[('statut','=','absent')]"/>
+                <group expand="0" string="Regrouper par">
+                    <filter string="Classe" name="groupby_classe" context="{'group_by':'classe_id'}"/>
+                    <filter string="Date" name="groupby_date" context="{'group_by':'date'}"/>
+                    <filter string="Statut" name="groupby_statut" context="{'group_by':'statut'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_adk_presence" model="ir.actions.act_window">
+        <field name="name">Registre de présence</field>
+        <field name="res_model">adk.presence</field>
+        <field name="view_mode">list,form</field>
+        <field name="context">{'search_default_today': 1}</field>
+    </record>
+
+</odoo>

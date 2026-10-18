@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_adk_wizard_bulletin_form" model="ir.ui.view">
+        <field name="name">adk.wizard.bulletin.form</field>
+        <field name="model">adk.wizard.bulletin</field>
+        <field name="arch" type="xml">
+            <form string="Générer les bulletins de notes">
+                <group>
+                    <field name="etablissement_id"/>
+                    <field name="tout_etablissement"/>
+                    <field name="classe_ids" widget="many2many_tags"
+                           invisible="tout_etablissement"
+                           domain="[('etablissement_id','=',etablissement_id)]"/>
+                    <field name="periode_id"/>
+                    <field name="valider_automatiquement"/>
+                    <field name="envoyer_parents" invisible="not valider_automatiquement"/>
+                </group>
+                <footer>
+                    <button name="action_generer" type="object" string="Générer"
+                            class="btn-primary"/>
+                    <button name="action_generer_et_imprimer" type="object"
+                            string="Générer et imprimer (PDF)" class="btn-secondary"/>
+                    <button string="Annuler" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_adk_wizard_bulletin" model="ir.actions.act_window">
+        <field name="name">Assistant Bulletins</field>
+        <field name="res_model">adk.wizard.bulletin</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+</odoo>

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_res_partner_form_adk" model="ir.ui.view">
+        <field name="name">res.partner.form.adk</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <button class="oe_stat_button" type="object" name="action_voir_fiches_enfants"
+                        icon="fa-child" invisible="not is_adk_parent">
+                    <field name="nb_enfants" widget="statinfo" string="Enfants"/>
+                </button>
+            </xpath>
+            <xpath expr="//field[@name='category_id']" position="after">
+                <field name="is_adk_parent"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="action_adk_parent" model="ir.actions.act_window">
+        <field name="name">Parents</field>
+        <field name="res_model">res.partner</field>
+        <field name="view_mode">kanban,list,form</field>
+        <field name="domain">[('is_adk_parent', '=', True)]</field>
+        <field name="context">{'default_is_adk_parent': True}</field>
+    </record>
+
+</odoo>

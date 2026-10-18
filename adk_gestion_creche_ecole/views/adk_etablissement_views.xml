@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_adk_etablissement_list" model="ir.ui.view">
+        <field name="name">adk.etablissement.list</field>
+        <field name="model">adk.etablissement</field>
+        <field name="arch" type="xml">
+            <list string="Établissements">
+                <field name="code"/>
+                <field name="name"/>
+                <field name="city"/>
+                <field name="directeur_id"/>
+                <field name="nb_batiments"/>
+                <field name="nb_salles"/>
+                <field name="nb_classes"/>
+                <field name="nb_eleves"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_adk_etablissement_form" model="ir.ui.view">
+        <field name="name">adk.etablissement.form</field>
+        <field name="model">adk.etablissement</field>
+        <field name="arch" type="xml">
+            <form string="Établissement">
+                <sheet>
+                    <field name="logo" widget="image" class="oe_avatar"/>
+                    <div class="oe_button_box" name="button_box">
+                        <button class="oe_stat_button" type="object" name="toggle_active" icon="fa-archive">
+                            <field name="active" widget="boolean_button"
+                                   options="{'terminology': 'archive'}"/>
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <label for="name"/>
+                        <h1><field name="name" placeholder="Nom de l'établissement"/></h1>
+                        <label for="code"/>
+                        <h3><field name="code" placeholder="Code"/></h3>
+                    </div>
+                    <group>
+                        <group string="Informations générales">
+                            <field name="company_id"/>
+                            <field name="directeur_id"/>
+                            <field name="tz"/>
+                            <field name="currency_id"/>
+                            <field name="journal_id"/>
+                        </group>
+                        <group string="Adresse">
+                            <field name="street"/>
+                            <field name="street2"/>
+                            <field name="city"/>
+                            <field name="zip"/>
+                            <field name="country_id"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Bâtiments">
+                            <field name="batiment_ids">
+                                <list>
+                                    <field name="name"/>
+                                    <field name="nb_salles"/>
+                                    <field name="issue_secours"/>
+                                    <field name="conformite_pmr"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Classes">
+                            <field name="classe_ids">
+                                <list>
+                                    <field name="name"/>
+                                    <field name="niveau_id"/>
+                                    <field name="effectif"/>
+                                    <field name="effectif_max"/>
+                                    <field name="titulaire_id"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Pauses institutionnelles">
+                            <field name="pause_ids">
+                                <list editable="bottom">
+                                    <field name="name"/>
+                                    <field name="type_pause"/>
+                                    <field name="jour_semaine"/>
+                                    <field name="heure_debut" widget="float_time"/>
+                                    <field name="heure_fin" widget="float_time"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_adk_etablissement_search" model="ir.ui.view">
+        <field name="name">adk.etablissement.search</field>
+        <field name="model">adk.etablissement</field>
+        <field name="arch" type="xml">
+            <search string="Rechercher un établissement">
+                <field name="name"/>
+                <field name="code"/>
+                <field name="city"/>
+                <field name="directeur_id"/>
+                <filter string="Archivés" name="inactive" domain="[('active', '=', False)]"/>
+                <group expand="0" string="Regrouper par">
+                    <filter string="Société" name="groupby_company" context="{'group_by': 'company_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_adk_etablissement" model="ir.actions.act_window">
+        <field name="name">Établissements</field>
+        <field name="res_model">adk.etablissement</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Créez votre premier établissement / campus
+            </p>
+        </field>
+    </record>
+
+</odoo>

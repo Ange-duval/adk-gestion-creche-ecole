@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_adk_batiment_list" model="ir.ui.view">
+        <field name="name">adk.batiment.list</field>
+        <field name="model">adk.batiment</field>
+        <field name="arch" type="xml">
+            <list string="Bâtiments">
+                <field name="name"/>
+                <field name="etablissement_id"/>
+                <field name="nb_salles"/>
+                <field name="issue_secours" widget="boolean_toggle"/>
+                <field name="conformite_pmr" widget="boolean_toggle"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_adk_batiment_form" model="ir.ui.view">
+        <field name="name">adk.batiment.form</field>
+        <field name="model">adk.batiment</field>
+        <field name="arch" type="xml">
+            <form string="Bâtiment">
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="name" placeholder="Nom du bâtiment"/></h1>
+                    </div>
+                    <group>
+                        <group string="Rattachement">
+                            <field name="etablissement_id"/>
+                            <field name="code"/>
+                        </group>
+                        <group string="Localisation interne">
+                            <field name="latitude"/>
+                            <field name="longitude"/>
+                        </group>
+                    </group>
+                    <group string="Normes de sécurité">
+                        <field name="issue_secours"/>
+                        <field name="conformite_pmr"/>
+                        <field name="date_derniere_inspection"/>
+                        <field name="notes_securite"/>
+                    </group>
+                    <notebook>
+                        <page string="Étages">
+                            <field name="etage_ids">
+                                <list editable="bottom">
+                                    <field name="name"/>
+                                    <field name="niveau"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Salles">
+                            <field name="salle_ids">
+                                <list>
+                                    <field name="name"/>
+                                    <field name="etage_id"/>
+                                    <field name="capacite_max"/>
+                                    <field name="statut"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_adk_batiment" model="ir.actions.act_window">
+        <field name="name">Bâtiments</field>
+        <field name="res_model">adk.batiment</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+</odoo>

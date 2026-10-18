@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_adk_classe_list" model="ir.ui.view">
+        <field name="name">adk.classe.list</field>
+        <field name="model">adk.classe</field>
+        <field name="arch" type="xml">
+            <list string="Classes" decoration-danger="effectif &gt; effectif_max">
+                <field name="code"/>
+                <field name="name"/>
+                <field name="etablissement_id"/>
+                <field name="niveau_id"/>
+                <field name="annee_scolaire_id"/>
+                <field name="titulaire_id"/>
+                <field name="salle_reference_id"/>
+                <field name="effectif"/>
+                <field name="effectif_max"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_adk_classe_form" model="ir.ui.view">
+        <field name="name">adk.classe.form</field>
+        <field name="model">adk.classe</field>
+        <field name="arch" type="xml">
+            <form string="Classe">
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="name" placeholder="Nom de la classe"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="etablissement_id"/>
+                            <field name="niveau_id"/>
+                            <field name="annee_scolaire_id"/>
+                            <field name="code"/>
+                        </group>
+                        <group>
+                            <field name="titulaire_id"/>
+                            <field name="salle_reference_id"
+                                   domain="[('etablissement_id', '=', etablissement_id)]"/>
+                            <field name="effectif"/>
+                            <field name="effectif_max"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Élèves">
+                            <field name="eleve_ids">
+                                <list>
+                                    <field name="matricule"/>
+                                    <field name="name"/>
+                                    <field name="date_naissance"/>
+                                    <field name="genre"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Sessions de cours">
+                            <field name="session_cours_ids">
+                                <list>
+                                    <field name="matiere_id"/>
+                                    <field name="enseignant_id"/>
+                                    <field name="salle_id"/>
+                                    <field name="heures_semaine"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_adk_classe_search" model="ir.ui.view">
+        <field name="name">adk.classe.search</field>
+        <field name="model">adk.classe</field>
+        <field name="arch" type="xml">
+            <search string="Rechercher une classe">
+                <field name="name"/>
+                <field name="etablissement_id"/>
+                <field name="titulaire_id"/>
+                <group expand="0" string="Regrouper par">
+                    <filter string="Établissement" name="groupby_etab" context="{'group_by':'etablissement_id'}"/>
+                    <filter string="Niveau" name="groupby_niveau" context="{'group_by':'niveau_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_adk_classe" model="ir.actions.act_window">
+        <field name="name">Classes</field>
+        <field name="res_model">adk.classe</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+</odoo>

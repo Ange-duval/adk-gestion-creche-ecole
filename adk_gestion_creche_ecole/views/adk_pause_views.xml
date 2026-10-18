@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_adk_pause_list" model="ir.ui.view">
+        <field name="name">adk.pause.list</field>
+        <field name="model">adk.pause</field>
+        <field name="arch" type="xml">
+            <list string="Pauses institutionnelles" editable="bottom">
+                <field name="etablissement_id"/>
+                <field name="name"/>
+                <field name="type_pause"/>
+                <field name="jour_semaine"/>
+                <field name="heure_debut" widget="float_time"/>
+                <field name="heure_fin" widget="float_time"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_adk_pause" model="ir.actions.act_window">
+        <field name="name">Pauses / Repas / Siestes</field>
+        <field name="res_model">adk.pause</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+</odoo>

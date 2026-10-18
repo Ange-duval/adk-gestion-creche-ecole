@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_hr_employee_form_adk" model="ir.ui.view">
+        <field name="name">hr.employee.form.adk</field>
+        <field name="model">hr.employee</field>
+        <field name="inherit_id" ref="hr.view_employee_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//notebook" position="inside">
+                <page string="ADK Crèche &amp; École" name="adk_page">
+                    <group>
+                        <group>
+                            <field name="is_adk_enseignant"/>
+                            <field name="is_adk_intendant"/>
+                            <field name="is_adk_bibliothecaire"/>
+                        </group>
+                        <group>
+                            <field name="etablissement_ids" widget="many2many_tags"/>
+                        </group>
+                    </group>
+                    <group string="Compétences d'enseignement"
+                           invisible="not is_adk_enseignant">
+                        <field name="matiere_competence_ids" widget="many2many_tags" nolabel="1"/>
+                    </group>
+                    <field name="session_cours_ids" invisible="not is_adk_enseignant">
+                        <list>
+                            <field name="matiere_id"/>
+                            <field name="classe_id"/>
+                            <field name="heures_semaine"/>
+                        </list>
+                    </field>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_hr_employee_list_adk" model="ir.ui.view">
+        <field name="name">hr.employee.list.adk</field>
+        <field name="model">hr.employee</field>
+        <field name="inherit_id" ref="hr.view_employee_filter"/>
+        <field name="arch" type="xml">
+            <xpath expr="//search" position="inside">
+                <filter string="Enseignants ADK" name="filter_adk_enseignant"
+                        domain="[('is_adk_enseignant','=',True)]"/>
+                <filter string="Intendants ADK" name="filter_adk_intendant"
+                        domain="[('is_adk_intendant','=',True)]"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="action_adk_enseignant" model="ir.actions.act_window">
+        <field name="name">Enseignants / Nounous</field>
+        <field name="res_model">hr.employee</field>
+        <field name="view_mode">kanban,list,form</field>
+        <field name="domain">[('is_adk_enseignant', '=', True)]</field>
+        <field name="context">{'default_is_adk_enseignant': True}</field>
+    </record>
+
+    <record id="action_adk_personnel" model="ir.actions.act_window">
+        <field name="name">Personnel (Intendants / Bibliothécaires)</field>
+        <field name="res_model">hr.employee</field>
+        <field name="view_mode">kanban,list,form</field>
+        <field name="domain">['|', ('is_adk_intendant', '=', True), ('is_adk_bibliothecaire', '=', True)]</field>
+    </record>
+
+</odoo>

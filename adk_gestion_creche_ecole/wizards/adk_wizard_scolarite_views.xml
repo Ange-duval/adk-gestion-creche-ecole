@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_adk_wizard_scolarite_form" model="ir.ui.view">
+        <field name="name">adk.wizard.scolarite.form</field>
+        <field name="model">adk.wizard.scolarite</field>
+        <field name="arch" type="xml">
+            <form string="Générer les factures de scolarité">
+                <group>
+                    <group>
+                        <field name="etablissement_id"/>
+                        <field name="annee_scolaire_id"/>
+                        <field name="classe_ids" widget="many2many_tags"
+                               domain="[('etablissement_id', '=', etablissement_id), ('annee_scolaire_id', '=', annee_scolaire_id)]"/>
+                    </group>
+                    <group>
+                        <field name="grille_id"/>
+                        <field name="date_facture"/>
+                        <field name="valider_factures"/>
+                    </group>
+                </group>
+                <p class="text-muted">
+                    Un dossier est créé pour chaque élève de la sélection qui n'en possède pas déjà un
+                    pour cette grille et cette année. Les paiements s'enregistrent ensuite depuis
+                    chaque dossier (par tranches si besoin) jusqu'à un solde de zéro.
+                </p>
+                <footer>
+                    <button name="action_generer" type="object" string="Générer" class="btn-primary"/>
+                    <button string="Annuler" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_adk_wizard_scolarite" model="ir.actions.act_window">
+        <field name="name">Générer les factures de scolarité</field>
+        <field name="res_model">adk.wizard.scolarite</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+</odoo>

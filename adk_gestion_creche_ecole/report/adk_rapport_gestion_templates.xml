@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="action_report_rapport_gestion" model="ir.actions.report">
+        <field name="name">Rapport de gestion scolaire</field>
+        <field name="model">adk.wizard.rapport</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">adk_gestion_creche_ecole.report_rapport_gestion_document</field>
+        <field name="report_file">adk_gestion_creche_ecole.report_rapport_gestion_document</field>
+        <field name="print_report_name">'Rapport scolaire %s' % (object.type_rapport)</field>
+        <field name="paperformat_id" ref="base.paperformat_euro"/>
+    </record>
+
+    <template id="report_rapport_gestion_document">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-set="d" t-value="rapports[o.id]"/>
+                <t t-set="company" t-value="o.etablissement_id.company_id if o.etablissement_id else env.company"/>
+                <t t-call="web.external_layout">
+                    <div class="page adk-report-page" style="font-family:'DejaVu Sans', Arial, sans-serif; color:#263449; font-size:9.5pt; line-height:1.35;">
+                        <style>
+                            .adk-report-page { font-family: 'DejaVu Sans', Arial, sans-serif; }
+                            .adk-report-title { color:#17365D; font-size:21pt; line-height:1.15; font-weight:700; margin:0 0 4px; }
+                            .adk-report-subtitle { color:#5B6573; font-size:9.5pt; margin:0 0 12px; }
+                            .adk-report-overline { color:#1D70C9; font-size:8pt; font-weight:700; letter-spacing:.7px; }
+                            .adk-report-section { color:#17365D; font-size:11pt; font-weight:700; margin:13px 0 5px; padding-bottom:3px; border-bottom:1px solid #D8E2EF; }
+                            .adk-report-meta, .adk-report-kpis { width:100%; table-layout:fixed; border-collapse:separate; border-spacing:4px; margin:0 0 10px; }
+                            .adk-report-meta td { background:#F2F6FB; border:1px solid #E0E8F2; padding:6px 7px; vertical-align:top; overflow-wrap:anywhere; }
+                            .adk-report-meta-label { font-size:7pt; color:#64748B; text-transform:uppercase; font-weight:700; margin-bottom:2px; }
+                            .adk-report-meta-value { color:#1E293B; font-size:9pt; font-weight:600; overflow-wrap:anywhere; }
+                            .adk-report-kpis td { border:1px solid #D9E3EF; border-top:3px solid #1671C5; padding:8px 5px; text-align:center; vertical-align:middle; }
+                            .adk-report-kpi-label { color:#64748B; font-size:7pt; font-weight:700; }
+                            .adk-report-kpi-value { color:#17365D; font-size:13pt; font-weight:700; margin-top:3px; overflow-wrap:anywhere; }
+                            .adk-report-table { width:100%; table-layout:fixed; border-collapse:collapse; margin:0 0 8px; font-size:8pt; }
+                            .adk-report-table thead { display:table-header-group; }
+                            .adk-report-table th { background:#17365D; color:#fff; font-weight:700; padding:6px 5px; border:1px solid #17365D; vertical-align:middle; overflow-wrap:anywhere; }
+                            .adk-report-table td { padding:5px; border:1px solid #DCE3EC; vertical-align:top; overflow-wrap:anywhere; word-wrap:break-word; }
+                            .adk-report-table tbody tr:nth-child(even) { background:#F5F8FC; }
+                            .adk-report-total td { background:#E8F0FA; color:#17365D; font-weight:700; border-top:1.5px solid #A9BED8; }
+                            .adk-report-note { margin-top:10px; padding:7px 9px; border-left:3px solid #1D70C9; background:#F4F8FC; color:#566273; font-size:8pt; }
+                            .adk-report-chart { page-break-inside:avoid; margin:6px 0 10px; }
+                            .adk-report-signature { width:100%; table-layout:fixed; border-collapse:separate; border-spacing:5px 0; margin-top:6px; }
+                            .adk-report-signature td { border:1px solid #CBD5E1; height:62px; padding:7px; vertical-align:top; }
+                            .adk-report-footer { margin-top:12px; padding-top:5px; border-top:1px solid #CBD5E1; color:#64748B; font-size:7.5pt; }
+                        </style>
+
+                        <div style="border-bottom:3px solid #1D70C9; padding-bottom:8px; margin-bottom:10px;">
+                            <div class="adk-report-overline">
+                                <t t-esc="d['etablissement']"/> — RAPPORT DE GESTION
+                            </div>
+                            <div class="adk-report-title" t-esc="d['titre']"/>
+                            <div class="adk-report-subtitle" t-esc="d['sous_titre']"/>
+                            <table style="width:100%; border-collapse:collapse; font-size:8pt; color:#64748B;">
+                                <tr>
+                                    <td style="text-align:left;">
+                                        <strong>MODÈLE</strong> <t t-esc="d['modele']"/>
+                                    </td>
+                                    <td style="text-align:right;">
+                                        <strong>ANNÉE ACADÉMIQUE</strong> <t t-esc="d['annee']"/>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+
+                        <table t-if="d['meta']" class="adk-report-meta">
+                            <tr>
+                                <t t-foreach="d['meta']" t-as="m">
+                                    <td>
+                                        <div class="adk-report-meta-label" t-esc="m[0]"/>
+                                        <div class="adk-report-meta-value" t-esc="m[1]"/>
+                                    </td>
+                                </t>
+                            </tr>
+                        </table>
+
+                        <table t-if="d['kpis']" class="adk-report-kpis">
+                            <tr>
+                                <t t-foreach="d['kpis']" t-as="k">
+                                    <td>
+                                        <div class="adk-report-kpi-label" t-esc="k['label']"/>
+                                        <div class="adk-report-kpi-value" t-esc="k['value']"/>
+                                    </td>
+                                </t>
+                            </tr>
+                        </table>
+
+                        <t t-foreach="d['tables']" t-as="tbl">
+                            <div t-if="tbl['title']" class="adk-report-section" t-esc="tbl['title']"/>
+                            <table class="adk-report-table">
+                                <thead>
+                                    <tr>
+                                        <t t-foreach="tbl['cols']" t-as="c">
+                                            <th t-att-style="'text-align:%s;' % ('right' if c[1] == 'r' else 'left')" t-esc="c[0]"/>
+                                        </t>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <t t-foreach="tbl['rows']" t-as="r">
+                                        <tr>
+                                            <t t-foreach="r" t-as="cell">
+                                                <td t-att-style="'text-align:%s;' % ('right' if tbl['cols'][cell_index][1] == 'r' else 'left')" t-esc="cell"/>
+                                            </t>
+                                        </tr>
+                                    </t>
+                                    <tr t-if="tbl.get('total')" class="adk-report-total">
+                                        <t t-foreach="tbl['total']" t-as="cell">
+                                            <td t-att-style="'text-align:%s;' % ('right' if tbl['cols'][cell_index][1] == 'r' else 'left')" t-esc="cell"/>
+                                        </t>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </t>
+
+                        <div t-if="d['bars']" class="adk-report-section">Comparatif par grille tarifaire</div>
+                        <div t-if="d['bars']" class="adk-report-chart">
+                            <t t-foreach="d['bars']" t-as="b">
+                                <div style="font-size:8.5pt; font-weight:700; color:#263449; margin:7px 0 3px;" t-esc="b['label']"/>
+                                <table style="width:100%; border-collapse:collapse; table-layout:fixed;">
+                                    <t t-foreach="b['series']" t-as="s">
+                                        <tr>
+                                            <td style="width:22%; font-size:7.5pt; color:#5B6573; padding:2px 4px 2px 0;" t-esc="s[0]"/>
+                                            <td style="width:53%; padding:2px 4px;">
+                                                <div style="background:#E7EDF5; height:9px; width:100%;">
+                                                    <div t-attf-style="background:#{s[3]}; height:9px; width:#{min(max(round(s[1], 1), 0), 100)}%;"/>
+                                                </div>
+                                            </td>
+                                            <td style="width:25%; text-align:right; font-size:7.5pt; padding:2px 0 2px 4px;" t-esc="s[2]"/>
+                                        </tr>
+                                    </t>
+                                </table>
+                            </t>
+                        </div>
+
+                        <div t-if="d['note']" class="adk-report-note">
+                            <strong>Note de lecture :</strong> <t t-esc="d['note']"/>
+                        </div>
+
+                        <t t-if="d['signature']">
+                            <div class="adk-report-section" style="margin-top:16px;">Visa et validation</div>
+                            <table class="adk-report-signature">
+                                <tr>
+                                    <t t-foreach="['Préparé par', 'Contrôlé par', 'Approuvé par']" t-as="who">
+                                        <td>
+                                            <div style="font-size:7pt; font-weight:700; color:#64748B; text-transform:uppercase;" t-esc="who"/>
+                                            <div style="font-size:8pt; color:#94A3B8; margin-top:5px;">Nom, date et signature</div>
+                                        </td>
+                                    </t>
+                                </tr>
+                            </table>
+                        </t>
+
+                        <div class="adk-report-footer">
+                            <table style="width:100%; border-collapse:collapse;">
+                                <tr>
+                                    <td style="text-align:left;">ADK Crèche &amp; École · Document généré automatiquement</td>
+                                    <td style="text-align:right;">Édité le <t t-esc="d['date_edition']"/></td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+</odoo>

@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="0">
+
+        <!-- Multi-société : chaque établissement n'est visible que dans sa société -->
+        <record id="rule_adk_etablissement_company" model="ir.rule">
+            <field name="name">Établissement multi-société</field>
+            <field name="model_id" ref="model_adk_etablissement"/>
+            <field name="domain_force">['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]</field>
+        </record>
+
+        <!-- Portail parent : un parent ne voit que les fiches de ses propres enfants -->
+        <record id="rule_adk_eleve_parent" model="ir.rule">
+            <field name="name">Élève : accès parent restreint à ses enfants</field>
+            <field name="model_id" ref="model_adk_eleve"/>
+            <field name="domain_force">[('parent_ids.user_ids', 'in', [user.id])]</field>
+            <field name="groups" eval="[(4, ref('group_adk_parent'))]"/>
+        </record>
+
+        <record id="rule_adk_note_parent" model="ir.rule">
+            <field name="name">Notes : accès parent restreint à ses enfants</field>
+            <field name="model_id" ref="model_adk_note"/>
+            <field name="domain_force">[('eleve_id.parent_ids.user_ids', 'in', [user.id])]</field>
+            <field name="groups" eval="[(4, ref('group_adk_parent'))]"/>
+        </record>
+
+        <record id="rule_adk_bulletin_parent" model="ir.rule">
+            <field name="name">Bulletins : accès parent restreint à ses enfants</field>
+            <field name="model_id" ref="model_adk_bulletin"/>
+            <field name="domain_force">[('eleve_id.parent_ids.user_ids', 'in', [user.id]), ('etat', '=', 'envoye')]</field>
+            <field name="groups" eval="[(4, ref('group_adk_parent'))]"/>
+        </record>
+
+        <record id="rule_adk_presence_parent" model="ir.rule">
+            <field name="name">Présences : accès parent restreint à ses enfants</field>
+            <field name="model_id" ref="model_adk_presence"/>
+            <field name="domain_force">[('eleve_id.parent_ids.user_ids', 'in', [user.id])]</field>
+            <field name="groups" eval="[(4, ref('group_adk_parent'))]"/>
+        </record>
+
+        <!-- Enseignant : ne voit que les présences des classes où il enseigne -->
+        <record id="rule_adk_presence_enseignant" model="ir.rule">
+            <field name="name">Présences : accès enseignant restreint à ses classes</field>
+            <field name="model_id" ref="model_adk_presence"/>
+            <field name="domain_force">[('classe_id.session_cours_ids.enseignant_id.user_id', 'in', [user.id])]</field>
+            <field name="groups" eval="[(4, ref('group_adk_enseignant'))]"/>
+        </record>
+
+        <!-- Directeur : accès complet (BUGFIX - manquait, cf. explication pour Élève ci-dessous) -->
+        <record id="rule_adk_presence_directeur" model="ir.rule">
+            <field name="name">Présences : accès complet Directeur</field>
+            <field name="model_id" ref="model_adk_presence"/>
+            <field name="domain_force">[(1, '=', 1)]</field>
+            <field name="groups" eval="[(4, ref('group_adk_directeur'))]"/>
+        </record>
+
+        <!-- Directeur : accès complet aux notes (BUGFIX - même cause que Présences) -->
+        <record id="rule_adk_note_directeur" model="ir.rule">
+            <field name="name">Notes : accès complet Directeur</field>
+            <field name="model_id" ref="model_adk_note"/>
+            <field name="domain_force">[(1, '=', 1)]</field>
+            <field name="groups" eval="[(4, ref('group_adk_directeur'))]"/>
+        </record>
+
+        <!-- Directeur : accès complet aux bulletins (BUGFIX - même cause que Présences) -->
+        <record id="rule_adk_bulletin_directeur" model="ir.rule">
+            <field name="name">Bulletins : accès complet Directeur</field>
+            <field name="model_id" ref="model_adk_bulletin"/>
+            <field name="domain_force">[(1, '=', 1)]</field>
+            <field name="groups" eval="[(4, ref('group_adk_directeur'))]"/>
+        </record>
+
+        <!-- Enseignant : ne voit que les élèves des classes où il enseigne -->
+        <record id="rule_adk_eleve_enseignant" model="ir.rule">
+            <field name="name">Élève : accès enseignant restreint à ses classes</field>
+            <field name="model_id" ref="model_adk_eleve"/>
+            <field name="domain_force">[('classe_id.session_cours_ids.enseignant_id.user_id', 'in', [user.id])]</field>
+            <field name="groups" eval="[(4, ref('group_adk_enseignant'))]"/>
+        </record>
+
+        <!-- ============================================================
+             IMPORTANT - explication du bug corrigé ci-dessus :
+             group_adk_directeur implied_ids -> group_adk_enseignant
+             group_adk_enseignant implied_ids -> group_adk_parent
+             => tout Directeur (donc aussi l'Administrateur, membre du
+             groupe Directeur) est TRANSITIVEMENT membre du groupe Parent.
+             En Odoo, les ir.rule liées à un groupe se combinent en OR
+             uniquement entre elles pour les groupes auxquels appartient
+             l'utilisateur ; si AUCUNE règle "Directeur" n'existe pour un
+             modèle qui a une règle "Parent", cette dernière s'applique
+             quand même au Directeur car c'est la seule règle de groupe
+             trouvée. C'est ce qui bloquait la création de présences
+             (et aurait aussi bloqué Notes/Bulletins) : un rule_adk_xxx_directeur
+             (domaine [(1,'=',1)]) doit systématiquement exister en miroir
+             de toute règle "Parent" ou "Enseignant" pour rester cohérent.
+             ============================================================ -->
+
+        <!-- Directeur : accès complet (se combine en OR avec les règles ci-dessus,
+             indispensable car le groupe Directeur hérite implicitement des groupes
+             Enseignant / Parent et serait sinon restreint par leurs règles) -->
+        <record id="rule_adk_eleve_directeur" model="ir.rule">
+            <field name="name">Élève : accès complet Directeur</field>
+            <field name="model_id" ref="model_adk_eleve"/>
+            <field name="domain_force">[(1, '=', 1)]</field>
+            <field name="groups" eval="[(4, ref('group_adk_directeur'))]"/>
+        </record>
+
+        <!-- ===== Facturation scolaire ===== -->
+        <record id="rule_adk_dossier_company" model="ir.rule">
+            <field name="name">Dossier de scolarité multi-société</field>
+            <field name="model_id" ref="model_adk_dossier_scolarite"/>
+            <field name="domain_force">['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]</field>
+        </record>
+        <record id="rule_adk_dossier_parent" model="ir.rule">
+            <field name="name">Dossier de scolarité : accès parent restreint à ses enfants</field>
+            <field name="model_id" ref="model_adk_dossier_scolarite"/>
+            <field name="domain_force">[('eleve_id.parent_ids.user_ids', 'in', [user.id])]</field>
+            <field name="groups" eval="[(4, ref('group_adk_parent'))]"/>
+        </record>
+        <record id="rule_adk_dossier_directeur" model="ir.rule">
+            <field name="name">Dossier de scolarité : accès complet Directeur</field>
+            <field name="model_id" ref="model_adk_dossier_scolarite"/>
+            <field name="domain_force">[(1, '=', 1)]</field>
+            <field name="groups" eval="[(4, ref('group_adk_directeur'))]"/>
+        </record>
+        <record id="rule_adk_dossier_intendant" model="ir.rule">
+            <field name="name">Dossier de scolarité : accès complet Intendant</field>
+            <field name="model_id" ref="model_adk_dossier_scolarite"/>
+            <field name="domain_force">[(1, '=', 1)]</field>
+            <field name="groups" eval="[(4, ref('group_adk_intendant'))]"/>
+        </record>
+
+    </data>
+</odoo>

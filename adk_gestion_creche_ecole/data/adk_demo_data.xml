@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="0">
+
+        <record id="demo_etablissement_1" model="adk.etablissement">
+            <field name="name">ADK Campus Nord</field>
+            <field name="code">CN-01</field>
+            <field name="city">Douala</field>
+        </record>
+
+        <record id="demo_batiment_1" model="adk.batiment">
+            <field name="name">Bâtiment Maternelle</field>
+            <field name="etablissement_id" ref="demo_etablissement_1"/>
+            <field name="issue_secours" eval="True"/>
+            <field name="conformite_pmr" eval="True"/>
+        </record>
+
+        <record id="demo_etage_1" model="adk.etage">
+            <field name="name">Rez-de-chaussée</field>
+            <field name="niveau">0</field>
+            <field name="batiment_id" ref="demo_batiment_1"/>
+        </record>
+
+        <record id="demo_salle_1" model="adk.salle">
+            <field name="name">Salle Bleue</field>
+            <field name="batiment_id" ref="demo_batiment_1"/>
+            <field name="etage_id" ref="demo_etage_1"/>
+            <field name="capacite_max">20</field>
+            <field name="type_salle">creche</field>
+        </record>
+
+        <record id="demo_classe_1" model="adk.classe">
+            <field name="name">Petite Section A</field>
+            <field name="etablissement_id" ref="demo_etablissement_1"/>
+            <field name="niveau_id" ref="niveau_maternelle"/>
+            <field name="salle_reference_id" ref="demo_salle_1"/>
+            <field name="effectif_max">20</field>
+        </record>
+
+        <record id="demo_matiere_1" model="adk.matiere">
+            <field name="name">Éveil Musical</field>
+            <field name="coefficient">1.0</field>
+            <field name="volume_horaire_annuel">30</field>
+        </record>
+
+        <record id="demo_matiere_2" model="adk.matiere">
+            <field name="name">Anglais Débutant</field>
+            <field name="coefficient">1.5</field>
+            <field name="volume_horaire_annuel">40</field>
+        </record>
+
+        <record id="demo_pause_1" model="adk.pause">
+            <field name="name">Pause déjeuner</field>
+            <field name="etablissement_id" ref="demo_etablissement_1"/>
+            <field name="type_pause">repas</field>
+            <field name="jour_semaine">0</field>
+            <field name="heure_debut">12.0</field>
+            <field name="heure_fin">13.5</field>
+        </record>
+
+        <record id="demo_parent_1" model="res.partner">
+            <field name="name">Jean Mballa</field>
+            <field name="is_adk_parent" eval="True"/>
+            <field name="email">jean.mballa@example.com</field>
+            <field name="phone">+237600000000</field>
+        </record>
+
+        <record id="demo_eleve_1" model="adk.eleve">
+            <field name="prenom">Aline</field>
+            <field name="nom">Mballa</field>
+            <field name="name">Aline Mballa</field>
+            <field name="etablissement_id" ref="demo_etablissement_1"/>
+            <field name="classe_id" ref="demo_classe_1"/>
+            <field name="genre">f</field>
+            <field name="parent_ids" eval="[(4, ref('demo_parent_1'))]"/>
+        </record>
+
+    </data>
+</odoo>

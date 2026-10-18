@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_adk_wizard_facturation_form" model="ir.ui.view">
+        <field name="name">adk.wizard.facturation.form</field>
+        <field name="model">adk.wizard.facturation</field>
+        <field name="arch" type="xml">
+            <form string="Facturation mensuelle globale">
+                <group>
+                    <field name="etablissement_id"/>
+                    <field name="classe_ids" widget="many2many_tags"
+                           domain="[('etablissement_id','=',etablissement_id)]"/>
+                    <field name="mois"/>
+                </group>
+                <group string="Éléments à inclure">
+                    <field name="inclure_scolarite"/>
+                    <field name="montant_scolarite_mensuel" invisible="not inclure_scolarite"/>
+                    <field name="inclure_repas"/>
+                    <field name="inclure_fournitures"/>
+                </group>
+                <footer>
+                    <button name="action_generer_factures" type="object" string="Générer les factures"
+                            class="btn-primary"/>
+                    <button string="Annuler" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_adk_wizard_facturation" model="ir.actions.act_window">
+        <field name="name">Assistant Facturation Mensuelle</field>
+        <field name="res_model">adk.wizard.facturation</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+</odoo>

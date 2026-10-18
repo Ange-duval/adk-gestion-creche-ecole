@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_adk_eleve_list" model="ir.ui.view">
+        <field name="name">adk.eleve.list</field>
+        <field name="model">adk.eleve</field>
+        <field name="arch" type="xml">
+            <list string="Élèves">
+                <field name="matricule"/>
+                <field name="name"/>
+                <field name="etablissement_id"/>
+                <field name="classe_id"/>
+                <field name="date_naissance"/>
+                <field name="genre"/>
+                <field name="taux_absence" widget="percentage"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_adk_eleve_kanban" model="ir.ui.view">
+        <field name="name">adk.eleve.kanban</field>
+        <field name="model">adk.eleve</field>
+        <field name="arch" type="xml">
+            <kanban class="o_kanban_mobile">
+                <field name="name"/>
+                <field name="photo"/>
+                <field name="classe_id"/>
+                <templates>
+                    <t t-name="card">
+                        <div class="d-flex">
+                            <field name="photo" widget="image" class="o_kanban_image"
+                                   options="{'size': [64,64]}"/>
+                            <div class="ms-3">
+                                <strong><field name="name"/></strong>
+                                <div><field name="classe_id"/></div>
+                                <div><field name="matricule"/></div>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <record id="view_adk_eleve_form" model="ir.ui.view">
+        <field name="name">adk.eleve.form</field>
+        <field name="model">adk.eleve</field>
+        <field name="arch" type="xml">
+            <form string="Élève">
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_voir_dossiers" type="object" class="oe_stat_button"
+                                icon="fa-money" groups="adk_gestion_creche_ecole.group_adk_intendant">
+                            <field name="nb_dossiers" widget="statinfo" string="Scolarité"/>
+                        </button>
+                    </div>
+                    <field name="photo" widget="image" class="oe_avatar"/>
+                    <div class="oe_title">
+                        <label for="name"/>
+                        <h1><field name="name" placeholder="Nom complet"/></h1>
+                        <field name="matricule" readonly="1"/>
+                    </div>
+                    <group>
+                        <group string="État civil">
+                            <field name="prenom"/>
+                            <field name="nom"/>
+                            <field name="date_naissance"/>
+                            <field name="lieu_naissance"/>
+                            <field name="genre"/>
+                            <field name="nationalite_id"/>
+                            <field name="adresse"/>
+                        </group>
+                        <group string="Affectation scolaire">
+                            <field name="etablissement_id"/>
+                            <field name="classe_id" domain="[('etablissement_id','=',etablissement_id)]"/>
+                            <field name="annee_scolaire_id"/>
+                            <field name="date_inscription"/>
+                            <field name="taux_absence" widget="percentage"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Parents / Tuteurs">
+                            <field name="parent_ids">
+                                <list>
+                                    <field name="name"/>
+                                    <field name="phone"/>
+                                    <field name="email"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Historique médical">
+                            <group>
+                                <field name="medecin_traitant"/>
+                                <field name="telephone_medecin"/>
+                                <field name="groupe_sanguin"/>
+                            </group>
+                            <field name="allergies" placeholder="Allergies connues..."/>
+                            <field name="antecedents_medicaux" placeholder="Antécédents médicaux..."/>
+                        </page>
+                        <page string="Présences">
+                            <field name="presence_ids">
+                                <list>
+                                    <field name="date"/>
+                                    <field name="statut"/>
+                                    <field name="mode_saisie"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Notes">
+                            <field name="note_ids">
+                                <list>
+                                    <field name="matiere_id"/>
+                                    <field name="periode_id"/>
+                                    <field name="note_obtenue"/>
+                                    <field name="note_sur"/>
+                                    <field name="date_evaluation"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Bulletins">
+                            <field name="bulletin_ids">
+                                <list>
+                                    <field name="periode_id"/>
+                                    <field name="moyenne_generale"/>
+                                    <field name="rang"/>
+                                    <field name="etat"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Scolarité" groups="adk_gestion_creche_ecole.group_adk_intendant">
+                            <group>
+                                <field name="solde_scolarite" widget="monetary"/>
+                                <field name="currency_id" invisible="1"/>
+                            </group>
+                            <field name="dossier_ids" readonly="1">
+                                <list>
+                                    <field name="name"/>
+                                    <field name="annee_scolaire_id"/>
+                                    <field name="grille_id"/>
+                                    <field name="montant_net" sum="Total"/>
+                                    <field name="montant_paye" sum="Total"/>
+                                    <field name="solde" sum="Total"/>
+                                    <field name="etat" widget="badge"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Badges">
+                            <field name="badge_ids">
+                                <list>
+                                    <field name="name"/>
+                                    <field name="date_emission"/>
+                                    <field name="statut"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_adk_eleve_search" model="ir.ui.view">
+        <field name="name">adk.eleve.search</field>
+        <field name="model">adk.eleve</field>
+        <field name="arch" type="xml">
+            <search string="Rechercher un élève">
+                <field name="name"/>
+                <field name="matricule"/>
+                <field name="classe_id"/>
+                <field name="etablissement_id"/>
+                <group expand="0" string="Regrouper par">
+                    <filter string="Classe" name="groupby_classe" context="{'group_by':'classe_id'}"/>
+                    <filter string="Établissement" name="groupby_etab" context="{'group_by':'etablissement_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_adk_eleve" model="ir.actions.act_window">
+        <field name="name">Élèves</field>
+        <field name="res_model">adk.eleve</field>
+        <field name="view_mode">kanban,list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Inscrivez votre premier élève
+            </p>
+        </field>
+    </record>
+
+</odoo>

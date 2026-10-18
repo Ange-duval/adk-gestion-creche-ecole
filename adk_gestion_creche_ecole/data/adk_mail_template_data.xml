@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+
+        <record id="mail_template_absence_eleve" model="mail.template">
+            <field name="name">ADK - Notification d'absence élève</field>
+            <field name="model_id" ref="model_adk_presence"/>
+            <field name="subject">Absence de {{ object.eleve_id.name }} le {{ object.date }}</field>
+            <field name="email_to">{{ ','.join(object.eleve_id.parent_ids.mapped('email') or []) }}</field>
+            <field name="body_html" type="html">
+                <div style="font-family: sans-serif;">
+                    <p>Bonjour,</p>
+                    <p>
+                        Nous vous informons que <strong t-out="object.eleve_id.name"/> a été signalé(e)
+                        <strong>absent(e)</strong> le <strong t-out="object.date"/>
+                        à l'établissement <strong t-out="object.eleve_id.etablissement_id.name"/>.
+                    </p>
+                    <p>Si cette absence n'est pas justifiée, merci de contacter l'établissement.</p>
+                    <p>Cordialement,<br/>ADK Gestion Crèche &amp; École</p>
+                </div>
+            </field>
+        </record>
+
+        <record id="mail_template_bulletin_eleve" model="mail.template">
+            <field name="name">ADK - Envoi du bulletin de notes</field>
+            <field name="model_id" ref="model_adk_bulletin"/>
+            <field name="subject">Bulletin de notes de {{ object.eleve_id.name }}</field>
+            <field name="email_to">{{ ','.join(object.eleve_id.parent_ids.mapped('email') or []) }}</field>
+            <field name="report_template_ids" eval="[(4, ref('action_report_bulletin'))]"/>
+            <field name="body_html" type="html">
+                <div style="font-family: sans-serif;">
+                    <p>Bonjour,</p>
+                    <p>
+                        Veuillez trouver ci-joint le bulletin de notes de
+                        <strong t-out="object.eleve_id.name"/> pour la période sélectionnée.
+                    </p>
+                    <p>Cordialement,<br/>ADK Gestion Crèche &amp; École</p>
+                </div>
+            </field>
+        </record>
+
+    </data>
+</odoo>

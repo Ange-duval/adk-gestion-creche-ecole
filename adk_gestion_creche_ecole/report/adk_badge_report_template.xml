@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Carte professionnelle horizontale : société Odoo + établissement + identité + rôle + référence + QR. -->
+    <template id="report_badge_cr80_document">
+        <t t-call="web.basic_layout">
+            <style>
+                /* Tables instead of flex/absolute positioning: reliable in wkhtmltopdf. */
+                .adk-card-page { margin: 0; padding: 0; font-family: Helvetica, Arial, sans-serif; }
+                .adk-card { width: 100mm; height: 62mm; margin: 0 auto 5mm; border: .35mm solid #D8DFE9; border-radius: 2.5mm; overflow: hidden; background: #fff; color: #24334A; page-break-inside: avoid; }
+                .adk-card table { width: 100%; border-collapse: collapse; table-layout: fixed; }
+                .adk-card-head { background: #30204D; color: #fff; border-bottom: 1mm solid #E5AD45; padding: 2.2mm 3mm 1.8mm; }
+                .adk-card-company { font-size: 10pt; line-height: 1.15; font-weight: bold; color: #fff; }
+                .adk-card-establishment { font-size: 8pt; line-height: 1.15; color: #E9E1F2; padding-top: 1mm; }
+                .adk-card-body { height: 39mm; vertical-align: middle; padding: 2.2mm 2.5mm; }
+                .adk-card-photo-cell { width: 25mm; padding: 0 2mm 0 0; vertical-align: middle; }
+                .adk-card-photo { width: 23mm; height: 28mm; border: .25mm solid #E0E4EB; border-radius: 1mm; }
+                .adk-card-no-photo { width: 23mm; height: 28mm; background: #F1EEF5; color: #746783; text-align: center; font-size: 8pt; padding-top: 12mm; }
+                .adk-card-info-cell { vertical-align: middle; padding: 0 1.5mm 0 0; }
+                .adk-card-name { font-size: 10pt; font-weight: bold; color: #30204D; line-height: 1.2; padding-bottom: 1.5mm; overflow-wrap: break-word; }
+                .adk-card-role { color: #8A5B12; font-size: 8pt; font-weight: bold; line-height: 1.2; padding-bottom: 2mm; }
+                .adk-card-number { font-size: 7.5pt; font-weight: bold; color: #30204D; line-height: 1.2; overflow-wrap: break-word; }
+                .adk-card-date { font-size: 6.5pt; color: #746B7D; padding-top: 1.5mm; }
+                .adk-card-qr-cell { width: 23mm; text-align: center; vertical-align: middle; }
+                .adk-card-qr { width: 20mm; height: 20mm; padding: 1mm; background: #fff; border: .25mm solid #E4DFEA; }
+                .adk-card-qr-label { font-size: 5.5pt; line-height: 1.1; color: #71677C; padding-top: 1mm; }
+                .adk-card-foot { border-top: .2mm solid #E8E3ED; padding: 1.2mm 3mm; font-size: 6pt; line-height: 1.1; color: #786F83; }
+            </style>
+            <div class="adk-card-page">
+                <t t-foreach="docs" t-as="badge">
+                    <div class="adk-card">
+                        <table>
+                            <tr>
+                                <td class="adk-card-head" colspan="3">
+                                    <div class="adk-card-company"><t t-esc="badge.env.company.name or ''"/></div>
+                                    <div class="adk-card-establishment"><t t-esc="badge.etablissement_id.name or ''"/></div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="adk-card-body adk-card-photo-cell">
+                                    <img t-if="badge.photo" class="adk-card-photo" t-att-src="image_data_uri(badge.photo)" alt="Photo du titulaire"/>
+                                    <div t-if="not badge.photo" class="adk-card-no-photo">PHOTO</div>
+                                </td>
+                                <td class="adk-card-body adk-card-info-cell">
+                                    <div class="adk-card-name"><span t-field="badge.prenom_affiche"/> <span t-field="badge.nom_affiche"/></div>
+                                    <div class="adk-card-role"><span t-field="badge.role"/></div>
+                                    <div class="adk-card-number">N° du badge : <span t-field="badge.name"/></div>
+                                    <div class="adk-card-date">Émis le : <span t-field="badge.date_emission"/></div>
+                                </td>
+                                <td class="adk-card-body adk-card-qr-cell">
+                                    <img class="adk-card-qr" t-att-src="'/report/barcode/?barcode_type=QR&amp;value=%s&amp;width=220&amp;height=220' % badge.qr_value" alt="Code QR du badge"/>
+                                    <div class="adk-card-qr-label">Scanner pour identification</div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="adk-card-foot" colspan="3">Badge personnel — à présenter au contrôle d'accès.</td>
+                            </tr>
+                        </table>
+                    </div>
+                </t>
+            </div>
+        </t>
+    </template>
+
+    <!-- ===================== BADGES FORMAT ÉTIQUETTE ===================== -->
+    <template id="report_badge_etiquette_document">
+        <t t-call="web.basic_layout">
+            <style>
+                .adk-etq-page { display: flex; flex-wrap: wrap; gap: 3mm; padding: 6mm; }
+                .adk-etq-card {
+                    width: 60mm; height: 30mm; border: 0.3mm dashed #999; border-radius: 2mm;
+                    display:flex; align-items:center; padding: 2mm; font-family: Helvetica, Arial, sans-serif;
+                    page-break-inside: avoid;
+                }
+                .adk-etq-qr { width: 20mm; height: 20mm; }
+                .adk-etq-info { margin-left: 3mm; font-size: 8pt; }
+            </style>
+            <div class="adk-etq-page">
+                <t t-foreach="docs" t-as="badge">
+                    <div class="adk-etq-card">
+                        <img class="adk-etq-qr"
+                             t-att-src="'/report/barcode/?type=%s&amp;value=%s&amp;width=200&amp;height=200' % ('QR', badge.qr_value)"/>
+                        <div class="adk-etq-info">
+                            <strong><span t-field="badge.prenom_affiche"/> <span t-field="badge.nom_affiche"/></strong>
+                            <div><span t-field="badge.role"/></div>
+                            <div><span t-field="badge.etablissement_id.name"/></div>
+                            <div>Réf. <span t-field="badge.name"/></div>
+                        </div>
+                    </div>
+                </t>
+            </div>
+        </t>
+    </template>
+
+</odoo>

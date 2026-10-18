@@ -1,0 +1,262 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ===================== GRILLE TARIFAIRE ===================== -->
+    <record id="view_adk_grille_tarifaire_list" model="ir.ui.view">
+        <field name="name">adk.grille.tarifaire.list</field>
+        <field name="model">adk.grille.tarifaire</field>
+        <field name="arch" type="xml">
+            <list string="Grilles tarifaires">
+                <field name="name"/>
+                <field name="code"/>
+                <field name="annee_scolaire_id"/>
+                <field name="niveau_id"/>
+                <field name="periodicite"/>
+                <field name="montant_total" widget="monetary"/>
+                <field name="currency_id" column_invisible="1"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_adk_grille_tarifaire_form" model="ir.ui.view">
+        <field name="name">adk.grille.tarifaire.form</field>
+        <field name="model">adk.grille.tarifaire</field>
+        <field name="arch" type="xml">
+            <form string="Grille tarifaire">
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_voir_dossiers" type="object" class="oe_stat_button" icon="fa-folder-open-o">
+                            <field name="nb_dossiers" widget="statinfo" string="Dossiers"/>
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <label for="name"/>
+                        <h1><field name="name" placeholder="Ex : Annuelle 2025-2026"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="code"/>
+                            <field name="annee_scolaire_id"/>
+                            <field name="niveau_id"/>
+                        </group>
+                        <group>
+                            <field name="periodicite"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                            <field name="montant_total" widget="monetary"/>
+                            <field name="currency_id" invisible="1"/>
+                            <field name="active" invisible="1"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Rubriques facturées">
+                            <field name="ligne_ids">
+                                <list editable="bottom">
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="name"/>
+                                    <field name="product_id" optional="show"/>
+                                    <field name="montant" sum="Total"/>
+                                    <field name="currency_id" column_invisible="1"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Échéancier (tranches)">
+                            <field name="tranche_ids">
+                                <list editable="bottom">
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="name"/>
+                                    <field name="pourcentage" sum="Total %"/>
+                                    <field name="delai_jours"/>
+                                    <field name="montant"/>
+                                    <field name="currency_id" column_invisible="1"/>
+                                </list>
+                            </field>
+                            <p class="text-muted">Facultatif. Si renseigné, le total des tranches doit faire 100 %.</p>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_adk_grille_tarifaire" model="ir.actions.act_window">
+        <field name="name">Grilles tarifaires</field>
+        <field name="res_model">adk.grille.tarifaire</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">Créez votre première grille tarifaire</p>
+            <p>Une grille regroupe les rubriques facturées (inscription, scolarité...) et, si besoin,
+               l'échéancier de paiement par tranches.</p>
+        </field>
+    </record>
+
+    <!-- ===================== DOSSIER DE SCOLARITÉ ===================== -->
+    <record id="view_adk_dossier_scolarite_list" model="ir.ui.view">
+        <field name="name">adk.dossier.scolarite.list</field>
+        <field name="model">adk.dossier.scolarite</field>
+        <field name="arch" type="xml">
+            <list string="Dossiers de scolarité" decoration-success="etat == 'paye'"
+                  decoration-warning="etat == 'partiel'" decoration-muted="etat == 'annule'">
+                <field name="name"/>
+                <field name="eleve_id"/>
+                <field name="classe_id" optional="show"/>
+                <field name="annee_scolaire_id" optional="show"/>
+                <field name="grille_id"/>
+                <field name="date_facture" optional="hide"/>
+                <field name="montant_net" sum="Total"/>
+                <field name="montant_paye" sum="Total"/>
+                <field name="solde" sum="Total"/>
+                <field name="etat" widget="badge"
+                       decoration-success="etat == 'paye'" decoration-warning="etat == 'partiel'"
+                       decoration-info="etat == 'facture'" decoration-danger="etat == 'annule'"/>
+                <field name="currency_id" column_invisible="1"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_adk_dossier_scolarite_form" model="ir.ui.view">
+        <field name="name">adk.dossier.scolarite.form</field>
+        <field name="model">adk.dossier.scolarite</field>
+        <field name="arch" type="xml">
+            <form string="Dossier de scolarité">
+                <header>
+                    <button name="action_creer_facture" type="object" string="Créer la facture"
+                            class="btn-primary" invisible="invoice_id and invoice_state != 'cancel'"/>
+                    <button name="action_enregistrer_paiement" type="object" string="Enregistrer un paiement"
+                            class="btn-primary"
+                            invisible="etat not in ('facture', 'partiel')"/>
+                    <button name="action_annuler" type="object" string="Annuler"
+                            invisible="etat in ('annule', 'paye')"
+                            confirm="Annuler ce dossier et sa facture ?"/>
+                    <button name="action_remettre_brouillon" type="object" string="Remettre en brouillon"
+                            invisible="etat != 'annule'"/>
+                    <field name="etat" widget="statusbar" statusbar_visible="brouillon,facture,partiel,paye"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_voir_facture" type="object" class="oe_stat_button"
+                                icon="fa-file-text-o" invisible="not invoice_id">
+                            <div class="o_stat_info"><span class="o_stat_text">Facture</span></div>
+                        </button>
+                        <button name="action_voir_paiements" type="object" class="oe_stat_button"
+                                icon="fa-money" invisible="not nb_paiements">
+                            <field name="nb_paiements" widget="statinfo" string="Paiements"/>
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <h1><field name="name"/></h1>
+                    </div>
+                    <group>
+                        <group string="Élève">
+                            <field name="eleve_id" readonly="etat != 'brouillon'"/>
+                            <field name="classe_id"/>
+                            <field name="etablissement_id"/>
+                            <field name="partenaire_id" readonly="etat != 'brouillon'"/>
+                        </group>
+                        <group string="Facturation">
+                            <field name="annee_scolaire_id" readonly="etat != 'brouillon'"/>
+                            <field name="grille_id" readonly="etat != 'brouillon'"/>
+                            <field name="date_facture" readonly="etat != 'brouillon'"/>
+                            <field name="invoice_id"/>
+                            <field name="invoice_state" invisible="1"/>
+                            <field name="currency_id" invisible="1"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group string="Montants">
+                            <field name="montant_brut"/>
+                            <field name="bourse_pct" readonly="etat != 'brouillon'"/>
+                            <field name="remise_montant" readonly="etat != 'brouillon'"/>
+                            <field name="montant_net" class="fw-bold"/>
+                        </group>
+                        <group string="Règlement">
+                            <field name="montant_paye"/>
+                            <field name="solde" class="fw-bold"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Rubriques">
+                            <field name="ligne_ids" readonly="etat != 'brouillon'">
+                                <list editable="bottom">
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="name"/>
+                                    <field name="product_id" optional="hide"/>
+                                    <field name="montant" sum="Total"/>
+                                    <field name="currency_id" column_invisible="1"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Échéancier">
+                            <field name="tranche_ids" readonly="etat != 'brouillon'">
+                                <list editable="bottom" decoration-success="statut == 'paye'"
+                                      decoration-danger="statut == 'retard'" decoration-warning="statut == 'partiel'">
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="name"/>
+                                    <field name="pourcentage"/>
+                                    <field name="delai_jours"/>
+                                    <field name="date_echeance"/>
+                                    <field name="montant" sum="Total"/>
+                                    <field name="montant_paye" readonly="1"/>
+                                    <field name="statut" widget="badge" readonly="1"/>
+                                    <field name="currency_id" column_invisible="1"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Paiements">
+                            <field name="paiement_ids" readonly="1">
+                                <list>
+                                    <field name="date"/>
+                                    <field name="name"/>
+                                    <field name="journal_id"/>
+                                    <field name="amount" sum="Total"/>
+                                    <field name="currency_id" column_invisible="1"/>
+                                    <field name="create_uid" string="Enregistré par"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Notes">
+                            <field name="note"/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_adk_dossier_scolarite_search" model="ir.ui.view">
+        <field name="name">adk.dossier.scolarite.search</field>
+        <field name="model">adk.dossier.scolarite</field>
+        <field name="arch" type="xml">
+            <search string="Dossiers de scolarité">
+                <field name="name"/>
+                <field name="eleve_id"/>
+                <field name="classe_id"/>
+                <field name="grille_id"/>
+                <field name="annee_scolaire_id"/>
+                <filter string="Brouillons" name="f_brouillon" domain="[('etat', '=', 'brouillon')]"/>
+                <filter string="Impayés / à solder" name="f_solde"
+                        domain="[('etat', 'in', ('facture', 'partiel'))]"/>
+                <filter string="Soldés" name="f_paye" domain="[('etat', '=', 'paye')]"/>
+                <separator/>
+                <group expand="0" string="Regrouper par">
+                    <filter string="Année académique" name="g_annee" context="{'group_by': 'annee_scolaire_id'}"/>
+                    <filter string="Classe" name="g_classe" context="{'group_by': 'classe_id'}"/>
+                    <filter string="Grille" name="g_grille" context="{'group_by': 'grille_id'}"/>
+                    <filter string="État" name="g_etat" context="{'group_by': 'etat'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_adk_dossier_scolarite" model="ir.actions.act_window">
+        <field name="name">Dossiers de scolarité</field>
+        <field name="res_model">adk.dossier.scolarite</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">Créez le premier dossier de scolarité</p>
+            <p>Un dossier rassemble la facture d'un élève pour une année académique et tous ses
+               paiements, jusqu'au solde de zéro. Il est reporté automatiquement dans la comptabilité.</p>
+        </field>
+    </record>
+
+</odoo>

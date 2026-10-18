@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_adk_salle_list" model="ir.ui.view">
+        <field name="name">adk.salle.list</field>
+        <field name="model">adk.salle</field>
+        <field name="arch" type="xml">
+            <list string="Salles" decoration-danger="statut=='maintenance'" decoration-warning="statut=='desinfection'">
+                <field name="name"/>
+                <field name="batiment_id"/>
+                <field name="etage_id"/>
+                <field name="type_salle"/>
+                <field name="capacite_max"/>
+                <field name="statut"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_adk_salle_form" model="ir.ui.view">
+        <field name="name">adk.salle.form</field>
+        <field name="model">adk.salle</field>
+        <field name="arch" type="xml">
+            <form string="Salle de classe">
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="name" placeholder="Nom de la salle"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="batiment_id"/>
+                            <field name="etage_id"/>
+                            <field name="etablissement_id" readonly="1"/>
+                            <field name="type_salle"/>
+                        </group>
+                        <group>
+                            <field name="capacite_max"/>
+                            <field name="statut" widget="badge"
+                                   decoration-success="statut=='operationnelle'"
+                                   decoration-danger="statut=='maintenance'"
+                                   decoration-warning="statut=='desinfection'"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Matériel fixe">
+                            <field name="materiel_ids">
+                                <list editable="bottom">
+                                    <field name="name"/>
+                                    <field name="quantite"/>
+                                    <field name="etat"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Emploi du temps">
+                            <field name="emploi_temps_ids">
+                                <list>
+                                    <field name="jour_semaine"/>
+                                    <field name="heure_debut" widget="float_time"/>
+                                    <field name="heure_fin" widget="float_time"/>
+                                    <field name="matiere_id"/>
+                                    <field name="classe_id"/>
+                                    <field name="enseignant_id"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_adk_salle_search" model="ir.ui.view">
+        <field name="name">adk.salle.search</field>
+        <field name="model">adk.salle</field>
+        <field name="arch" type="xml">
+            <search string="Rechercher une salle">
+                <field name="name"/>
+                <field name="batiment_id"/>
+                <filter string="Opérationnelle" name="operationnelle" domain="[('statut','=','operationnelle')]"/>
+                <filter string="En maintenance" name="maintenance" domain="[('statut','=','maintenance')]"/>
+                <group expand="0" string="Regrouper par">
+                    <filter string="Bâtiment" name="groupby_batiment" context="{'group_by':'batiment_id'}"/>
+                    <filter string="Statut" name="groupby_statut" context="{'group_by':'statut'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_adk_salle" model="ir.actions.act_window">
+        <field name="name">Salles de classe</field>
+        <field name="res_model">adk.salle</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+</odoo>

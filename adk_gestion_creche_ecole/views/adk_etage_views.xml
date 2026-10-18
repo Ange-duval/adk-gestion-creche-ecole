@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_adk_etage_list" model="ir.ui.view">
+        <field name="name">adk.etage.list</field>
+        <field name="model">adk.etage</field>
+        <field name="arch" type="xml">
+            <list string="Étages" editable="bottom">
+                <field name="name"/>
+                <field name="niveau"/>
+                <field name="batiment_id"/>
+                <field name="etablissement_id"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_adk_etage_form" model="ir.ui.view">
+        <field name="name">adk.etage.form</field>
+        <field name="model">adk.etage</field>
+        <field name="arch" type="xml">
+            <form string="Étage">
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="niveau"/>
+                        <field name="batiment_id"/>
+                    </group>
+                    <field name="salle_ids">
+                        <list><field name="name"/><field name="capacite_max"/><field name="statut"/></list>
+                    </field>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_adk_etage" model="ir.actions.act_window">
+        <field name="name">Étages</field>
+        <field name="res_model">adk.etage</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+</odoo>

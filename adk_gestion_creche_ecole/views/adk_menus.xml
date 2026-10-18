@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <menuitem id="menu_adk_root" name="ADK Crèche &amp; École" sequence="5"
+              web_icon="adk_gestion_creche_ecole,static/description/icon.png"/>
+
+    <!-- ===================== TABLEAU DE BORD ===================== -->
+    <menuitem id="menu_adk_dashboard" name="Tableau de bord"
+              parent="menu_adk_root" action="action_adk_dashboard" sequence="1"/>
+
+    <!-- ===================== ÉTABLISSEMENTS ===================== -->
+    <menuitem id="menu_adk_etablissement_root" name="Établissements" parent="menu_adk_root" sequence="10"/>
+    <menuitem id="menu_adk_etablissement" name="Établissements / Campus"
+              parent="menu_adk_etablissement_root" action="action_adk_etablissement" sequence="10"/>
+    <menuitem id="menu_adk_batiment" name="Bâtiments"
+              parent="menu_adk_etablissement_root" action="action_adk_batiment" sequence="20"/>
+    <menuitem id="menu_adk_etage" name="Étages"
+              parent="menu_adk_etablissement_root" action="action_adk_etage" sequence="30"/>
+    <menuitem id="menu_adk_salle" name="Salles de classe"
+              parent="menu_adk_etablissement_root" action="action_adk_salle" sequence="40"/>
+
+    <!-- ===================== PROGRAMMES ACADÉMIQUES ===================== -->
+    <menuitem id="menu_adk_academique_root" name="Programmes académiques" parent="menu_adk_root" sequence="20"/>
+    <menuitem id="menu_adk_matiere" name="Matières"
+              parent="menu_adk_academique_root" action="action_adk_matiere" sequence="10"/>
+    <menuitem id="menu_adk_classe" name="Classes"
+              parent="menu_adk_academique_root" action="action_adk_classe" sequence="20"/>
+    <menuitem id="menu_adk_session_cours" name="Sessions de cours"
+              parent="menu_adk_academique_root" action="action_adk_session_cours" sequence="30"/>
+    <menuitem id="menu_adk_emploi_temps" name="Emploi du temps"
+              parent="menu_adk_academique_root" action="action_adk_emploi_temps" sequence="40"/>
+    <menuitem id="menu_adk_pause" name="Pauses / Repas / Siestes"
+              parent="menu_adk_academique_root" action="action_adk_pause" sequence="50"/>
+
+    <!-- ===================== ACTEURS ===================== -->
+    <menuitem id="menu_adk_acteurs_root" name="Élèves &amp; Personnel" parent="menu_adk_root" sequence="30"/>
+    <menuitem id="menu_adk_eleve" name="Élèves"
+              parent="menu_adk_acteurs_root" action="action_adk_eleve" sequence="10"/>
+    <menuitem id="menu_adk_parent" name="Parents"
+              parent="menu_adk_acteurs_root" action="action_adk_parent" sequence="20"/>
+    <menuitem id="menu_adk_enseignant" name="Enseignants / Nounous"
+              parent="menu_adk_acteurs_root" action="action_adk_enseignant" sequence="30"/>
+    <menuitem id="menu_adk_personnel" name="Intendants / Bibliothécaires"
+              parent="menu_adk_acteurs_root" action="action_adk_personnel" sequence="40"/>
+
+    <!-- ===================== FACTURATION SCOLAIRE ===================== -->
+    <menuitem id="menu_adk_scolarite_root" name="Facturation scolaire" parent="menu_adk_root" sequence="35"
+              groups="group_adk_intendant"/>
+    <menuitem id="menu_adk_dossier_scolarite" name="Dossiers de scolarité"
+              parent="menu_adk_scolarite_root" action="action_adk_dossier_scolarite" sequence="10"/>
+    <menuitem id="menu_adk_wizard_scolarite" name="Générer les factures de scolarité"
+              parent="menu_adk_scolarite_root" action="action_adk_wizard_scolarite" sequence="20"/>
+    <menuitem id="menu_adk_grille_tarifaire" name="Grilles tarifaires"
+              parent="menu_adk_scolarite_root" action="action_adk_grille_tarifaire" sequence="30"/>
+    <menuitem id="menu_adk_compta_factures" name="Factures clients (comptabilité)"
+              parent="menu_adk_scolarite_root" action="account.action_move_out_invoice_type" sequence="40"
+              groups="account.group_account_invoice"/>
+    <menuitem id="menu_adk_compta_paiements" name="Paiements clients (comptabilité)"
+              parent="menu_adk_scolarite_root" action="account.action_account_payments" sequence="50"
+              groups="account.group_account_invoice"/>
+
+    <!-- ===================== RAPPORTS DE GESTION ===================== -->
+    <menuitem id="menu_adk_rapports_root" name="Rapports" parent="menu_adk_root" sequence="45"
+              groups="group_adk_intendant"/>
+    <menuitem id="menu_adk_rapport_01" name="01 · Historique financier d'un élève" parent="menu_adk_rapports_root" action="action_adk_rapport_01" sequence="10"/>
+    <menuitem id="menu_adk_rapport_02" name="02 · Recettes par élève" parent="menu_adk_rapports_root" action="action_adk_rapport_02" sequence="20"/>
+    <menuitem id="menu_adk_rapport_03" name="03 · Synthèse financière" parent="menu_adk_rapports_root" action="action_adk_rapport_03" sequence="30"/>
+    <menuitem id="menu_adk_rapport_04" name="04 · Impayés et soldes restants" parent="menu_adk_rapports_root" action="action_adk_rapport_04" sequence="40"/>
+    <menuitem id="menu_adk_rapport_05" name="05 · Rapport par grille tarifaire" parent="menu_adk_rapports_root" action="action_adk_rapport_05" sequence="50"/>
+    <menuitem id="menu_adk_rapport_06" name="06 · Journal des encaissements" parent="menu_adk_rapports_root" action="action_adk_rapport_06" sequence="60"/>
+    <menuitem id="menu_adk_rapport_07" name="07 · Effectifs scolaires" parent="menu_adk_rapports_root" action="action_adk_rapport_07" sequence="70"/>
+    <menuitem id="menu_adk_rapport_08" name="08 · Bilan annuel" parent="menu_adk_rapports_root" action="action_adk_rapport_08" sequence="80"/>
+
+    <!-- ===================== VIE SCOLAIRE ===================== -->
+    <menuitem id="menu_adk_vie_scolaire_root" name="Vie scolaire" parent="menu_adk_root" sequence="40"/>
+    <menuitem id="menu_adk_presence" name="Présences"
+              parent="menu_adk_vie_scolaire_root" action="action_adk_presence" sequence="10"/>
+    <menuitem id="menu_adk_note" name="Notes"
+              parent="menu_adk_vie_scolaire_root" action="action_adk_note" sequence="20"/>
+    <menuitem id="menu_adk_bulletin" name="Bulletins"
+              parent="menu_adk_vie_scolaire_root" action="action_adk_bulletin" sequence="30"/>
+
+    <!-- ===================== LOGISTIQUE ===================== -->
+    <menuitem id="menu_adk_logistique_root" name="Logistique" parent="menu_adk_root" sequence="50"/>
+    <menuitem id="menu_adk_livre" name="Bibliothèque - Livres"
+              parent="menu_adk_logistique_root" action="action_adk_livre" sequence="10"/>
+    <menuitem id="menu_adk_pret_livre" name="Prêts de livres"
+              parent="menu_adk_logistique_root" action="action_adk_pret_livre" sequence="20"/>
+    <menuitem id="menu_adk_fourniture" name="Librairie - Fournitures"
+              parent="menu_adk_logistique_root" action="action_adk_fourniture" sequence="30"/>
+
+    <!-- ===================== SÉCURITÉ / BADGES ===================== -->
+    <menuitem id="menu_adk_securite_root" name="Sécurité &amp; Badges" parent="menu_adk_root" sequence="60"/>
+    <menuitem id="menu_adk_badge" name="Badges d'accès"
+              parent="menu_adk_securite_root" action="action_adk_badge" sequence="10"/>
+    <menuitem id="menu_adk_pointage" name="Pointages"
+              parent="menu_adk_securite_root" action="action_adk_pointage" sequence="20"/>
+
+    <!-- ===================== ASSISTANTS ===================== -->
+    <menuitem id="menu_adk_assistants_root" name="Assistants (Génération)" parent="menu_adk_root" sequence="70"/>
+    <menuitem id="menu_adk_wizard_bulletin" name="Générer les bulletins"
+              parent="menu_adk_assistants_root" action="action_adk_wizard_bulletin" sequence="10"/>
+    <menuitem id="menu_adk_wizard_badge" name="Générer les badges"
+              parent="menu_adk_assistants_root" action="action_adk_wizard_badge" sequence="20"/>
+    <menuitem id="menu_adk_wizard_saisie_notes" name="Saisie rapide des notes"
+              parent="menu_adk_assistants_root" action="action_adk_wizard_saisie_notes" sequence="30"/>
+    <menuitem id="menu_adk_wizard_facturation" name="Facturation mensuelle globale"
+              parent="menu_adk_assistants_root" action="action_adk_wizard_facturation" sequence="40"/>
+
+    <!-- ===================== CONFIGURATION (PARAMÉTRAGE) ===================== -->
+    <menuitem id="menu_adk_configuration_root" name="Configuration" parent="menu_adk_root" sequence="80"
+              groups="group_adk_directeur"/>
+    <menuitem id="menu_adk_annee_scolaire" name="Années académiques"
+              parent="menu_adk_configuration_root" action="action_adk_annee_scolaire" sequence="10"/>
+    <menuitem id="menu_adk_periode" name="Périodes"
+              parent="menu_adk_configuration_root" action="action_adk_periode" sequence="20"/>
+    <menuitem id="menu_adk_type_evaluation" name="Types d'évaluation"
+              parent="menu_adk_configuration_root" action="action_adk_type_evaluation" sequence="30"/>
+    <menuitem id="menu_adk_niveau" name="Niveaux"
+              parent="menu_adk_configuration_root" action="action_adk_niveau" sequence="40"/>
+
+</odoo>

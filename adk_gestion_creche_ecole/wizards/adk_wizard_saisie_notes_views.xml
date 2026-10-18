@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_adk_wizard_saisie_notes_form" model="ir.ui.view">
+        <field name="name">adk.wizard.saisie.notes.form</field>
+        <field name="model">adk.wizard.saisie.notes</field>
+        <field name="arch" type="xml">
+            <form string="Saisie rapide des notes en grille">
+                <group>
+                    <group>
+                        <field name="classe_id"/>
+                        <field name="matiere_id"/>
+                        <field name="enseignant_id"/>
+                    </group>
+                    <group>
+                        <field name="periode_id"/>
+                        <field name="type_evaluation_id"/>
+                        <field name="date_evaluation"/>
+                        <field name="note_sur"/>
+                    </group>
+                </group>
+                <field name="ligne_ids">
+                    <list editable="bottom">
+                        <field name="eleve_id" readonly="1"/>
+                        <field name="note_obtenue"/>
+                        <field name="appreciation"/>
+                    </list>
+                </field>
+                <footer>
+                    <button name="action_enregistrer" type="object" string="Enregistrer les notes"
+                            class="btn-primary"/>
+                    <button string="Annuler" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_adk_wizard_saisie_notes" model="ir.actions.act_window">
+        <field name="name">Assistant Saisie des Notes</field>
+        <field name="res_model">adk.wizard.saisie.notes</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+</odoo>

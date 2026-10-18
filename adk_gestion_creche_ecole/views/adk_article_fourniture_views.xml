@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_product_template_form_adk" model="ir.ui.view">
+        <field name="name">product.template.form.adk</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="product.product_template_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//notebook" position="inside">
+                <page string="ADK Librairie" name="adk_librairie">
+                    <group>
+                        <field name="is_adk_fourniture"/>
+                        <field name="type_fourniture" invisible="not is_adk_fourniture"/>
+                        <field name="is_adk_facturable_parent" invisible="not is_adk_fourniture"/>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="action_adk_fourniture" model="ir.actions.act_window">
+        <field name="name">Librairie - Fournitures scolaires</field>
+        <field name="res_model">product.template</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('is_adk_fourniture', '=', True)]</field>
+        <field name="context">{'default_is_adk_fourniture': True}</field>
+    </record>
+
+</odoo>

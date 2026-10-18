@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_adk_pointage_list" model="ir.ui.view">
+        <field name="name">adk.pointage.list</field>
+        <field name="model">adk.pointage</field>
+        <field name="arch" type="xml">
+            <list string="Pointages" decoration-danger="not correspondance_validee">
+                <field name="heure_pointage"/>
+                <field name="badge_id"/>
+                <field name="eleve_id"/>
+                <field name="parent_id"/>
+                <field name="employee_id"/>
+                <field name="type_mouvement"/>
+                <field name="intendant_id"/>
+                <field name="correspondance_validee"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_adk_pointage_form" model="ir.ui.view">
+        <field name="name">adk.pointage.form</field>
+        <field name="model">adk.pointage</field>
+        <field name="arch" type="xml">
+            <form string="Pointage">
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="type_mouvement" widget="radio" options="{'horizontal': true}"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="badge_id"/>
+                            <field name="eleve_id"/>
+                            <field name="parent_id"/>
+                            <field name="employee_id"/>
+                        </group>
+                        <group>
+                            <field name="heure_pointage"/>
+                            <field name="type_mouvement"/>
+                            <field name="intendant_id"/>
+                            <field name="correspondance_validee"/>
+                        </group>
+                    </group>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_adk_pointage" model="ir.actions.act_window">
+        <field name="name">Pointages (Entrées / Sorties)</field>
+        <field name="res_model">adk.pointage</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+</odoo>

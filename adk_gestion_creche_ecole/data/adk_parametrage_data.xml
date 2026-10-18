@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+
+        <!-- Niveaux scolaires -->
+        <record id="niveau_creche" model="adk.niveau">
+            <field name="name">Crèche</field>
+            <field name="sequence">10</field>
+        </record>
+        <record id="niveau_maternelle" model="adk.niveau">
+            <field name="name">Maternelle</field>
+            <field name="sequence">20</field>
+        </record>
+        <record id="niveau_primaire" model="adk.niveau">
+            <field name="name">Primaire</field>
+            <field name="sequence">30</field>
+        </record>
+        <record id="niveau_college" model="adk.niveau">
+            <field name="name">Collège</field>
+            <field name="sequence">40</field>
+        </record>
+        <record id="niveau_lycee" model="adk.niveau">
+            <field name="name">Lycée</field>
+            <field name="sequence">50</field>
+        </record>
+
+        <!-- Périodes -->
+        <record id="periode_t1" model="adk.periode">
+            <field name="name">Trimestre 1</field>
+            <field name="sequence">10</field>
+        </record>
+        <record id="periode_t2" model="adk.periode">
+            <field name="name">Trimestre 2</field>
+            <field name="sequence">20</field>
+        </record>
+        <record id="periode_t3" model="adk.periode">
+            <field name="name">Trimestre 3</field>
+            <field name="sequence">30</field>
+        </record>
+        <record id="periode_s1" model="adk.periode">
+            <field name="name">Semestre 1</field>
+            <field name="sequence">40</field>
+        </record>
+        <record id="periode_s2" model="adk.periode">
+            <field name="name">Semestre 2</field>
+            <field name="sequence">50</field>
+        </record>
+
+        <!-- Types d'évaluation -->
+        <record id="type_evaluation_devoir" model="adk.type.evaluation">
+            <field name="name">Devoir</field>
+            <field name="sequence">10</field>
+        </record>
+        <record id="type_evaluation_controle" model="adk.type.evaluation">
+            <field name="name">Contrôle</field>
+            <field name="sequence">20</field>
+        </record>
+        <record id="type_evaluation_examen" model="adk.type.evaluation">
+            <field name="name">Examen</field>
+            <field name="sequence">30</field>
+        </record>
+        <record id="type_evaluation_participation" model="adk.type.evaluation">
+            <field name="name">Participation</field>
+            <field name="sequence">40</field>
+        </record>
+
+    </data>
+</odoo>

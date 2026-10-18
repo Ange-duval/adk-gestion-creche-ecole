@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <t t-name="adk_gestion_creche_ecole.Dashboard">
+        <div class="o_adk_dashboard">
+
+            <div class="o_adk_header">
+                <div>
+                    <h2>Tableau de bord</h2>
+                    <div class="o_adk_subtitle" t-esc="state.today"/>
+                </div>
+                <button class="o_adk_refresh" t-on-click="refresh" title="Actualiser">
+                    <i class="fa fa-refresh" t-att-class="{ 'fa-spin': state.loading }"/>
+                    Actualiser
+                </button>
+            </div>
+
+            <div class="o_adk_error" t-if="state.error" t-esc="state.error"/>
+
+            <div class="o_adk_kpi_grid">
+                <div class="o_adk_kpi o_adk_kpi_blue" t-on-click="openEleves">
+                    <div class="o_adk_kpi_icon"><i class="fa fa-child"/></div>
+                    <div class="o_adk_kpi_value" t-esc="state.kpis.eleves"/>
+                    <div class="o_adk_kpi_label">Élèves actifs</div>
+                </div>
+
+                <div class="o_adk_kpi o_adk_kpi_lavender" t-on-click="openClasses">
+                    <div class="o_adk_kpi_icon"><i class="fa fa-users"/></div>
+                    <div class="o_adk_kpi_value" t-esc="state.kpis.classes"/>
+                    <div class="o_adk_kpi_label">Classes actives</div>
+                </div>
+
+                <div class="o_adk_kpi o_adk_kpi_green" t-on-click="openPresencesJour">
+                    <div class="o_adk_kpi_icon"><i class="fa fa-check-circle"/></div>
+                    <div class="o_adk_kpi_value"><t t-esc="state.kpis.tauxPresence"/>%</div>
+                    <div class="o_adk_kpi_label">Présence aujourd'hui</div>
+                </div>
+
+                <div class="o_adk_kpi o_adk_kpi_rose" t-on-click="openAbsencesJour">
+                    <div class="o_adk_kpi_icon"><i class="fa fa-exclamation-circle"/></div>
+                    <div class="o_adk_kpi_value" t-esc="state.kpis.absencesJour"/>
+                    <div class="o_adk_kpi_label">Absences aujourd'hui</div>
+                </div>
+
+                <div class="o_adk_kpi o_adk_kpi_amber" t-on-click="openNotes">
+                    <div class="o_adk_kpi_icon"><i class="fa fa-graduation-cap"/></div>
+                    <div class="o_adk_kpi_value"><t t-esc="state.kpis.moyenneGenerale.toFixed(1)"/>/20</div>
+                    <div class="o_adk_kpi_label">Moyenne générale</div>
+                </div>
+
+                <div class="o_adk_kpi o_adk_kpi_blue" t-on-click="openBulletinsBrouillon">
+                    <div class="o_adk_kpi_icon"><i class="fa fa-file-text-o"/></div>
+                    <div class="o_adk_kpi_value" t-esc="state.kpis.bulletinsBrouillon"/>
+                    <div class="o_adk_kpi_label">Bulletins en brouillon</div>
+                </div>
+
+                <div class="o_adk_kpi o_adk_kpi_lavender" t-on-click="openPretsRetard">
+                    <div class="o_adk_kpi_icon"><i class="fa fa-book"/></div>
+                    <div class="o_adk_kpi_value" t-esc="state.kpis.pretsRetard"/>
+                    <div class="o_adk_kpi_label">Prêts de livres en retard</div>
+                </div>
+
+                <div class="o_adk_kpi o_adk_kpi_lavender" t-on-click="openPointages">
+                    <div class="o_adk_kpi_icon"><i class="fa fa-exchange"/></div>
+                    <div class="o_adk_kpi_value" t-esc="state.kpis.pointagesJour"/>
+                    <div class="o_adk_kpi_label">Pointages aujourd'hui</div>
+                    <div class="o_adk_kpi_hint"><t t-esc="state.kpis.entreesJour"/> entrées · <t t-esc="state.kpis.sortiesJour"/> sorties</div>
+                </div>
+
+                <div class="o_adk_kpi o_adk_kpi_green" t-on-click="openBadges">
+                    <div class="o_adk_kpi_icon"><i class="fa fa-id-badge"/></div>
+                    <div class="o_adk_kpi_value" t-esc="state.kpis.badgesActifs"/>
+                    <div class="o_adk_kpi_label">Badges actifs</div>
+                </div>
+
+                <div class="o_adk_kpi o_adk_kpi_blue o_adk_kpi_finance" t-on-click="openCustomerInvoices">
+                    <div class="o_adk_kpi_icon"><i class="fa fa-line-chart"/></div>
+                    <div class="o_adk_kpi_value" t-if="state.financeDisponible" t-esc="formatMoney(state.kpis.chiffreAffaires)"/>
+                    <div class="o_adk_kpi_value o_adk_kpi_unavailable" t-else="">—</div>
+                    <div class="o_adk_kpi_label">Chiffre d'affaires total</div>
+                </div>
+
+                <div class="o_adk_kpi o_adk_kpi_lavender o_adk_kpi_finance" t-on-click="openCustomerInvoices">
+                    <div class="o_adk_kpi_icon"><i class="fa fa-calendar"/></div>
+                    <div class="o_adk_kpi_value" t-if="state.financeDisponible" t-esc="formatMoney(state.kpis.chiffreAffairesMois)"/>
+                    <div class="o_adk_kpi_value o_adk_kpi_unavailable" t-else="">—</div>
+                    <div class="o_adk_kpi_label">Chiffre d'affaires du mois</div>
+                </div>
+
+                <div class="o_adk_kpi o_adk_kpi_green o_adk_kpi_finance" t-on-click="openCustomerInvoices">
+                    <div class="o_adk_kpi_icon"><i class="fa fa-money"/></div>
+                    <div class="o_adk_kpi_value" t-if="state.financeDisponible" t-esc="formatMoney(state.kpis.encaissements)"/>
+                    <div class="o_adk_kpi_value o_adk_kpi_unavailable" t-else="">—</div>
+                    <div class="o_adk_kpi_label">Montant encaissé estimé</div>
+                </div>
+
+                <div class="o_adk_kpi o_adk_kpi_rose o_adk_kpi_finance" t-on-click="openCustomerInvoices">
+                    <div class="o_adk_kpi_icon"><i class="fa fa-exclamation-circle"/></div>
+                    <div class="o_adk_kpi_value" t-if="state.financeDisponible" t-esc="formatMoney(state.kpis.impayes)"/>
+                    <div class="o_adk_kpi_value o_adk_kpi_unavailable" t-else="">—</div>
+                    <div class="o_adk_kpi_label">Créances restantes</div>
+                </div>
+
+                <div class="o_adk_kpi o_adk_kpi_amber o_adk_kpi_finance" t-on-click="openVendorBills">
+                    <div class="o_adk_kpi_icon"><i class="fa fa-credit-card"/></div>
+                    <div class="o_adk_kpi_value" t-if="state.financeDisponible" t-esc="formatMoney(state.kpis.depenses)"/>
+                    <div class="o_adk_kpi_value o_adk_kpi_unavailable" t-else="">—</div>
+                    <div class="o_adk_kpi_label">Factures fournisseurs validées</div>
+                </div>
+            </div>
+            <div class="o_adk_finance_note" t-if="!state.financeDisponible">
+                Les KPI financiers nécessitent un accès en lecture à la comptabilité Odoo.
+            </div>
+
+            <div class="o_adk_panels">
+
+                <div class="o_adk_panel o_adk_panel_donut">
+                    <h3>Présences du jour</h3>
+                    <div class="o_adk_donut_wrap">
+                        <div class="o_adk_donut" t-attf-style="{{donutStyle()}}">
+                            <div class="o_adk_donut_hole">
+                                <span t-esc="state.kpis.tauxPresence"/>%
+                            </div>
+                        </div>
+                        <div class="o_adk_legend">
+                            <div class="o_adk_legend_item" t-foreach="state.presenceBreakdown" t-as="seg" t-key="seg.key">
+                                <span class="o_adk_dot" t-attf-style="background:{{seg.color}}"/>
+                                <span class="o_adk_legend_label" t-esc="seg.label"/>
+                                <span class="o_adk_legend_value" t-esc="seg.value"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="o_adk_panel o_adk_panel_bars">
+                    <h3>Taux d'absence par classe (30 derniers jours)</h3>
+                    <div class="o_adk_empty" t-if="!state.classesAbsences.length">
+                        Aucune donnée de présence sur la période.
+                    </div>
+                    <div class="o_adk_bar_row" t-foreach="state.classesAbsences" t-as="c" t-key="c.name">
+                        <div class="o_adk_bar_label" t-esc="c.name"/>
+                        <div class="o_adk_bar_track">
+                            <div class="o_adk_bar_fill" t-attf-style="width:{{c.taux}}%"/>
+                        </div>
+                        <div class="o_adk_bar_value"><t t-esc="c.taux"/>%</div>
+                    </div>
+                </div>
+
+                <div class="o_adk_panel o_adk_panel_list">
+                    <h3>Absences du jour</h3>
+                    <div class="o_adk_empty" t-if="!state.absencesListe.length">
+                        Aucune absence enregistrée aujourd'hui. 🎉
+                    </div>
+                    <div class="o_adk_list_row" t-foreach="state.absencesListe" t-as="a" t-key="a.id"
+                         t-on-click="() => this.openEleve(a.id)">
+                        <div class="o_adk_list_main">
+                            <span class="o_adk_list_name" t-esc="a.eleve"/>
+                            <span class="o_adk_list_sub" t-esc="a.classe"/>
+                        </div>
+                        <div class="o_adk_list_motif" t-esc="a.motif"/>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </t>
+
+</templates>

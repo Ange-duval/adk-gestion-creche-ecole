@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="0">
+
+        <record id="module_category_adk" model="ir.module.category">
+            <field name="name">ADK Crèche &amp; École</field>
+            <field name="sequence">20</field>
+        </record>
+
+        <record id="group_adk_parent" model="res.groups">
+            <field name="name">Parent (Portail)</field>
+            <field name="category_id" ref="module_category_adk"/>
+        </record>
+
+        <record id="group_adk_enseignant" model="res.groups">
+            <field name="name">Enseignant / Nounou</field>
+            <field name="category_id" ref="module_category_adk"/>
+            <field name="implied_ids" eval="[(4, ref('group_adk_parent'))]"/>
+        </record>
+
+        <record id="group_adk_bibliothecaire" model="res.groups">
+            <field name="name">Bibliothécaire</field>
+            <field name="category_id" ref="module_category_adk"/>
+        </record>
+
+        <record id="group_adk_intendant" model="res.groups">
+            <field name="name">Intendant (Économe / Magasinier)</field>
+            <field name="category_id" ref="module_category_adk"/>
+        </record>
+
+        <record id="group_adk_directeur" model="res.groups">
+            <field name="name">Directeur / Administrateur</field>
+            <field name="category_id" ref="module_category_adk"/>
+            <field name="implied_ids" eval="[(4, ref('group_adk_enseignant')),
+                                             (4, ref('group_adk_bibliothecaire')),
+                                             (4, ref('group_adk_intendant'))]"/>
+        </record>
+
+    </data>
+</odoo>

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_adk_note_list" model="ir.ui.view">
+        <field name="name">adk.note.list</field>
+        <field name="model">adk.note</field>
+        <field name="arch" type="xml">
+            <list string="Notes" editable="bottom">
+                <field name="date_evaluation"/>
+                <field name="eleve_id"/>
+                <field name="classe_id"/>
+                <field name="matiere_id"/>
+                <field name="periode_id"/>
+                <field name="type_evaluation_id"/>
+                <field name="note_obtenue"/>
+                <field name="note_sur"/>
+                <field name="note_ponderee_20"/>
+                <field name="enseignant_id"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_adk_note_search" model="ir.ui.view">
+        <field name="name">adk.note.search</field>
+        <field name="model">adk.note</field>
+        <field name="arch" type="xml">
+            <search string="Rechercher une note">
+                <field name="eleve_id"/>
+                <field name="classe_id"/>
+                <field name="matiere_id"/>
+                <group expand="0" string="Regrouper par">
+                    <filter string="Classe" name="groupby_classe" context="{'group_by':'classe_id'}"/>
+                    <filter string="Matière" name="groupby_matiere" context="{'group_by':'matiere_id'}"/>
+                    <filter string="Période" name="groupby_periode" context="{'group_by':'periode_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_adk_note" model="ir.actions.act_window">
+        <field name="name">Notes</field>
+        <field name="res_model">adk.note</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+</odoo>

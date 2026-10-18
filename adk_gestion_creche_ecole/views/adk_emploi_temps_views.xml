@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_adk_emploi_temps_list" model="ir.ui.view">
+        <field name="name">adk.emploi.temps.list</field>
+        <field name="model">adk.emploi.temps</field>
+        <field name="arch" type="xml">
+            <list string="Emploi du temps">
+                <field name="jour_semaine"/>
+                <field name="heure_debut" widget="float_time"/>
+                <field name="heure_fin" widget="float_time"/>
+                <field name="matiere_id"/>
+                <field name="classe_id"/>
+                <field name="enseignant_id"/>
+                <field name="salle_id"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_adk_emploi_temps_form" model="ir.ui.view">
+        <field name="name">adk.emploi.temps.form</field>
+        <field name="model">adk.emploi.temps</field>
+        <field name="arch" type="xml">
+            <form string="Créneau d'emploi du temps">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="session_cours_id"/>
+                            <field name="matiere_id" readonly="1"/>
+                            <field name="classe_id" readonly="1"/>
+                            <field name="enseignant_id" readonly="1"/>
+                        </group>
+                        <group>
+                            <field name="salle_id"/>
+                            <field name="jour_semaine"/>
+                            <field name="heure_debut" widget="float_time"/>
+                            <field name="heure_fin" widget="float_time"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_adk_emploi_temps" model="ir.actions.act_window">
+        <field name="name">Emploi du temps (Planification)</field>
+        <field name="res_model">adk.emploi.temps</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Glissez-déposez vos cours pour construire l'emploi du temps.
+                Le système bloque automatiquement les conflits enseignant / salle / capacité / pauses.
+            </p>
+        </field>
+    </record>
+
+</odoo>

@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <template id="report_bulletin_document">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="web.external_layout">
+                    <div class="page">
+
+                        <div class="text-center mb-4" style="border-bottom: 3px solid #1A3C6E; padding-bottom: 12px;">
+                            <h2 style="color:#1A3C6E; margin-bottom:0;">
+                                <span t-field="o.etablissement_id.name"/>
+                            </h2>
+                            <div style="color:#666;">
+                                <span t-field="o.etablissement_id.street"/> -
+                                <span t-field="o.etablissement_id.city"/>
+                            </div>
+                            <h3 style="margin-top:16px;">BULLETIN DE NOTES</h3>
+                        </div>
+
+                        <table class="table table-sm" style="width:100%; margin-bottom: 20px;">
+                            <tr>
+                                <td><strong>Élève :</strong> <span t-field="o.eleve_id.name"/></td>
+                                <td><strong>Matricule :</strong> <span t-field="o.eleve_id.matricule"/></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Classe :</strong> <span t-field="o.classe_id.name"/></td>
+                                <td><strong>Année scolaire :</strong> <span t-field="o.annee_scolaire_id.name"/></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Période :</strong> <span t-field="o.periode_id.name"/></td>
+                                <td><strong>Date d'édition :</strong> <span t-field="o.date_edition"/></td>
+                            </tr>
+                        </table>
+
+                        <table class="table table-bordered table-sm">
+                            <thead style="background-color:#1A3C6E; color:white;">
+                                <tr>
+                                    <th>Matière</th>
+                                    <th class="text-center">Coefficient</th>
+                                    <th class="text-center">Moyenne /20</th>
+                                    <th>Enseignant</th>
+                                    <th>Appréciation</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr t-foreach="o.ligne_ids" t-as="ligne">
+                                    <td><span t-field="ligne.matiere_id.name"/></td>
+                                    <td class="text-center"><span t-field="ligne.coefficient"/></td>
+                                    <td class="text-center"><span t-field="ligne.moyenne_ponderee"/></td>
+                                    <td><span t-field="ligne.enseignant_id.name"/></td>
+                                    <td><span t-field="ligne.appreciation"/></td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <table class="table table-sm" style="width:60%; margin-left:auto; margin-top:16px;">
+                            <tr>
+                                <td><strong>Moyenne de l'élève</strong></td>
+                                <td class="text-end"><span t-field="o.moyenne_generale"/> / 20</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Moyenne de la classe</strong></td>
+                                <td class="text-end"><span t-field="o.moyenne_classe"/> / 20</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Note la plus haute</strong></td>
+                                <td class="text-end"><span t-field="o.note_max_classe"/> / 20</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Note la plus basse</strong></td>
+                                <td class="text-end"><span t-field="o.note_min_classe"/> / 20</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Rang dans la classe</strong></td>
+                                <td class="text-end"><span t-field="o.rang"/></td>
+                            </tr>
+                        </table>
+
+                        <div class="mt-4" style="border-top: 1px solid #ccc; padding-top: 12px;">
+                            <strong>Avis global du conseil de classe / directeur :</strong>
+                            <p t-field="o.appreciation_generale"/>
+                        </div>
+
+                        <div class="mt-5" style="text-align:right;">
+                            <p>Fait à <span t-field="o.etablissement_id.city"/>, le <span t-field="o.date_edition"/></p>
+                            <p style="margin-top:40px;"><strong>Le Directeur</strong></p>
+                        </div>
+
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+
+</odoo>

@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_adk_session_cours_list" model="ir.ui.view">
+        <field name="name">adk.session.cours.list</field>
+        <field name="model">adk.session.cours</field>
+        <field name="arch" type="xml">
+            <list string="Sessions de cours">
+                <field name="matiere_id"/>
+                <field name="classe_id"/>
+                <field name="enseignant_id"/>
+                <field name="salle_id"/>
+                <field name="heures_semaine"/>
+                <field name="annee_scolaire_id"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_adk_session_cours_form" model="ir.ui.view">
+        <field name="name">adk.session.cours.form</field>
+        <field name="model">adk.session.cours</field>
+        <field name="arch" type="xml">
+            <form string="Session de cours">
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="name" readonly="1"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="matiere_id"/>
+                            <field name="classe_id"/>
+                            <field name="enseignant_id"
+                                   domain="[('is_adk_enseignant','=',True)]"/>
+                        </group>
+                        <group>
+                            <field name="salle_id"/>
+                            <field name="heures_semaine"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Créneaux planifiés">
+                            <field name="emploi_temps_ids">
+                                <list editable="bottom">
+                                    <field name="jour_semaine"/>
+                                    <field name="heure_debut" widget="float_time"/>
+                                    <field name="heure_fin" widget="float_time"/>
+                                    <field name="salle_id"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_adk_session_cours" model="ir.actions.act_window">
+        <field name="name">Sessions de cours</field>
+        <field name="res_model">adk.session.cours</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Associez une matière à une classe et un enseignant pour créer une session de cours.
+                Une même matière peut être dupliquée sur plusieurs classes et enseignants.
+            </p>
+        </field>
+    </record>
+
+</odoo>

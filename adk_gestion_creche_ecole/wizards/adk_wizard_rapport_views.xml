@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_adk_wizard_rapport_form" model="ir.ui.view">
+        <field name="name">adk.wizard.rapport.form</field>
+        <field name="model">adk.wizard.rapport</field>
+        <field name="arch" type="xml">
+            <form string="Rapport de gestion">
+                <group>
+                    <field name="type_rapport"/>
+                </group>
+                <group string="Périmètre">
+                    <group>
+                        <field name="annee_scolaire_id"/>
+                        <field name="etablissement_id"/>
+                        <field name="classe_id" invisible="type_rapport not in ('02', '04')"
+                               domain="[('etablissement_id', '=?', etablissement_id), ('annee_scolaire_id', '=?', annee_scolaire_id)]"/>
+                        <field name="niveau_id" invisible="type_rapport not in ('02', '03', '04')"/>
+                        <field name="eleve_id" required="type_rapport == '01'" invisible="type_rapport != '01'"/>
+                        <field name="grille_id" invisible="type_rapport not in ('02', '03', '04', '05')"
+                               domain="[('annee_scolaire_id', '=?', annee_scolaire_id)]"/>
+                    </group>
+                    <group>
+                        <field name="date_debut" invisible="type_rapport in ('04', '07', '08')"/>
+                        <field name="date_fin" invisible="type_rapport in ('04', '07')"/>
+                        <field name="date_arret" invisible="type_rapport not in ('04', '07')"/>
+                        <field name="caissier_id" invisible="type_rapport != '06'"/>
+                        <field name="statut_paiement" invisible="type_rapport != '02'"/>
+                        <field name="solde_min" invisible="type_rapport != '04'"/>
+                        <field name="retard_min" invisible="type_rapport != '04'"/>
+                        <field name="currency_id" invisible="1"/>
+                    </group>
+                </group>
+                <footer>
+                    <button name="action_imprimer" type="object" string="Imprimer le PDF" class="btn-primary"/>
+                    <button string="Fermer" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_adk_wizard_rapport" model="ir.actions.act_window">
+        <field name="name">Rapports de gestion</field>
+        <field name="res_model">adk.wizard.rapport</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <record id="action_adk_rapport_01" model="ir.actions.act_window">
+        <field name="name">Historique financier d'un élève</field>
+        <field name="res_model">adk.wizard.rapport</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="context">{'default_type_rapport': '01'}</field>
+    </record>
+
+    <record id="action_adk_rapport_02" model="ir.actions.act_window">
+        <field name="name">Recettes par élève</field>
+        <field name="res_model">adk.wizard.rapport</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="context">{'default_type_rapport': '02'}</field>
+    </record>
+
+    <record id="action_adk_rapport_03" model="ir.actions.act_window">
+        <field name="name">Synthèse financière</field>
+        <field name="res_model">adk.wizard.rapport</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="context">{'default_type_rapport': '03'}</field>
+    </record>
+
+    <record id="action_adk_rapport_04" model="ir.actions.act_window">
+        <field name="name">Impayés et soldes</field>
+        <field name="res_model">adk.wizard.rapport</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="context">{'default_type_rapport': '04'}</field>
+    </record>
+
+    <record id="action_adk_rapport_05" model="ir.actions.act_window">
+        <field name="name">Rapport par grille tarifaire</field>
+        <field name="res_model">adk.wizard.rapport</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="context">{'default_type_rapport': '05'}</field>
+    </record>
+
+    <record id="action_adk_rapport_06" model="ir.actions.act_window">
+        <field name="name">Journal des encaissements</field>
+        <field name="res_model">adk.wizard.rapport</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="context">{'default_type_rapport': '06'}</field>
+    </record>
+
+    <record id="action_adk_rapport_07" model="ir.actions.act_window">
+        <field name="name">Effectifs scolaires</field>
+        <field name="res_model">adk.wizard.rapport</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="context">{'default_type_rapport': '07'}</field>
+    </record>
+
+    <record id="action_adk_rapport_08" model="ir.actions.act_window">
+        <field name="name">Bilan annuel</field>
+        <field name="res_model">adk.wizard.rapport</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="context">{'default_type_rapport': '08'}</field>
+    </record>
+
+</odoo>

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_adk_badge_list" model="ir.ui.view">
+        <field name="name">adk.badge.list</field>
+        <field name="model">adk.badge</field>
+        <field name="arch" type="xml">
+            <list string="Badges" decoration-danger="statut=='suspendu'" decoration-muted="statut=='perdu'">
+                <field name="name"/>
+                <field name="role"/>
+                <field name="nom_affiche"/>
+                <field name="prenom_affiche"/>
+                <field name="etablissement_id"/>
+                <field name="date_emission"/>
+                <field name="statut"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_adk_badge_form" model="ir.ui.view">
+        <field name="name">adk.badge.form</field>
+        <field name="model">adk.badge</field>
+        <field name="arch" type="xml">
+            <form string="Badge d'accès">
+                <header>
+                    <button name="action_set_draft" type="object" string="Remettre en brouillon" class="btn-secondary" invisible="statut == 'brouillon'" confirm="Remettre ce badge en brouillon ?"/>
+                    <button name="action_activate" type="object" string="Activer" class="btn-primary" invisible="statut == 'actif'"/>
+                    <button name="action_suspend" type="object" string="Suspendre" class="btn-secondary" invisible="statut != 'actif'" confirm="Suspendre ce badge ?"/>
+                    <button name="action_mark_lost" type="object" string="Marquer perdu" class="btn-secondary" invisible="statut == 'perdu'" confirm="Marquer ce badge comme perdu/réémis ?"/>
+                    <field name="statut" widget="statusbar" statusbar_visible="brouillon,actif,suspendu,perdu"/>
+                </header>
+                <sheet>
+                    <field name="photo" widget="image" class="oe_avatar"/>
+                    <div class="oe_title">
+                        <h1><field name="name" readonly="1"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="role"/>
+                            <field name="eleve_id" invisible="role != 'eleve'"/>
+                            <field name="parent_id" invisible="role != 'parent'"/>
+                            <field name="employee_id" invisible="role not in ('enseignant','personnel')"/>
+                            <field name="etablissement_id"/>
+                        </group>
+                        <group>
+                            <field name="date_emission"/>
+                            <field name="date_expiration"/>
+                            <field name="qr_value" readonly="1"/>
+                        </group>
+                    </group>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_adk_badge" model="ir.actions.act_window">
+        <field name="name">Badges d'accès</field>
+        <field name="res_model">adk.badge</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+</odoo>

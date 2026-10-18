@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="action_report_bulletin" model="ir.actions.report">
+        <field name="name">Bulletin de notes</field>
+        <field name="model">adk.bulletin</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">adk_gestion_creche_ecole.report_bulletin_document</field>
+        <field name="report_file">adk_gestion_creche_ecole.report_bulletin_document</field>
+        <field name="binding_model_id" ref="model_adk_bulletin"/>
+        <field name="binding_type">report</field>
+        <field name="print_report_name">'Bulletin - %s' % (object.eleve_id.name)</field>
+    </record>
+
+    <record id="action_report_badge_cr80" model="ir.actions.report">
+        <field name="name">Badges d'accès (CR80)</field>
+        <field name="model">adk.badge</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">adk_gestion_creche_ecole.report_badge_cr80_document</field>
+        <field name="report_file">adk_gestion_creche_ecole.report_badge_cr80_document</field>
+        <field name="binding_model_id" ref="model_adk_badge"/>
+        <field name="binding_type">report</field>
+        <field name="print_report_name">'Badges CR80'</field>
+    </record>
+
+    <record id="action_report_badge_etiquette" model="ir.actions.report">
+        <field name="name">Badges d'accès (Étiquettes)</field>
+        <field name="model">adk.badge</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">adk_gestion_creche_ecole.report_badge_etiquette_document</field>
+        <field name="report_file">adk_gestion_creche_ecole.report_badge_etiquette_document</field>
+        <field name="binding_model_id" ref="model_adk_badge"/>
+        <field name="binding_type">report</field>
+        <field name="print_report_name">'Badges Étiquettes'</field>
+    </record>
+
+
+    <!-- Mise en page soignée des factures de scolarité ADK.
+         Le rapport standard Odoo reste utilisé pour conserver les calculs comptables et les paiements. -->
+    <template id="report_invoice_document_adk_school" inherit_id="account.report_invoice_document">
+        <xpath expr="//div[@id='informations']" position="before">
+            <t t-if="o.adk_dossier_id and o.adk_dossier_id.etablissement_id">
+                <t t-set="school" t-value="o.adk_dossier_id.etablissement_id"/>
+                <div class="adk-school-invoice-heading" style="margin:8px 0 16px; padding:12px 14px; border:1px solid #D8E3F0; border-left:5px solid #1671C5; background:#F7FAFE; page-break-inside:avoid; font-family:'DejaVu Sans', Arial, sans-serif;">
+                    <table style="width:100%; border-collapse:collapse;">
+                        <tr>
+                            <td t-if="school.logo" style="width:78px; padding-right:12px; vertical-align:middle;">
+                                <img t-att-src="image_data_uri(school.logo)" style="max-width:68px; max-height:62px; object-fit:contain;"/>
+                            </td>
+                            <td style="vertical-align:middle;">
+                                <div style="font-size:17pt; line-height:1.2; font-weight:700; color:#17365D;">
+                                    <span t-esc="school.name"/>
+                                </div>
+                                <div style="font-size:8.5pt; color:#526174; margin-top:3px;">
+                                    <span t-if="school.street" t-esc="school.street"/>
+                                    <span t-if="school.street2"> · <t t-esc="school.street2"/></span>
+                                    <span t-if="school.city"> · <t t-esc="school.city"/></span>
+                                    <span t-if="school.country_id"> · <t t-esc="school.country_id.name"/></span>
+                                </div>
+                                <div style="font-size:8pt; color:#1671C5; font-weight:700; margin-top:5px; letter-spacing:.6px;">
+                                    FACTURE DE SCOLARITÉ
+                                </div>
+                            </td>
+                            <td style="width:155px; text-align:right; vertical-align:middle; padding-left:10px;">
+                                <div style="font-size:7.5pt; color:#64748B;">RÉFÉRENCE DU DOSSIER</div>
+                                <div style="font-size:10pt; font-weight:700; color:#17365D; margin-bottom:7px;">
+                                    <span t-esc="o.adk_dossier_id.name"/>
+                                </div>
+                                <div style="font-size:7.5pt; color:#64748B;">ANNÉE ACADÉMIQUE</div>
+                                <div style="font-size:9pt; font-weight:700; color:#17365D;">
+                                    <span t-esc="o.adk_dossier_id.annee_scolaire_id.name or '—'"/>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                    <table style="width:100%; border-collapse:collapse; margin-top:10px; border-top:1px solid #D8E3F0; padding-top:7px; font-size:8.5pt;">
+                        <tr>
+                            <td style="width:50%; padding:7px 8px 0 0; vertical-align:top;">
+                                <div style="font-size:7pt; color:#64748B; font-weight:700; text-transform:uppercase;">Élève</div>
+                                <div style="font-size:10pt; font-weight:700; color:#263449;">
+                                    <span t-esc="o.adk_dossier_id.eleve_id.name"/>
+                                </div>
+                                <div style="color:#526174;">
+                                    Matricule : <span t-esc="o.adk_dossier_id.eleve_id.matricule or '—'"/>
+                                </div>
+                            </td>
+                            <td style="width:50%; padding:7px 0 0 8px; vertical-align:top;">
+                                <div style="font-size:7pt; color:#64748B; font-weight:700; text-transform:uppercase;">Classe</div>
+                                <div style="font-size:10pt; font-weight:700; color:#263449;">
+                                    <span t-esc="o.adk_dossier_id.classe_id.name or '—'"/>
+                                </div>
+                                <div style="color:#526174;">
+                                    Date de facture : <span t-field="o.invoice_date"/>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </t>
+        </xpath>
+        <xpath expr="//table[@name='invoice_line_table']" position="attributes">
+            <attribute name="style">width:100%; border-collapse:collapse; font-family:'DejaVu Sans', Arial, sans-serif; font-size:9pt;</attribute>
+            <attribute name="class">o_main_table table table-sm</attribute>
+        </xpath>
+        <xpath expr="//div[contains(@class, 'page')]" position="inside">
+            <style>
+                .adk-school-invoice-heading { page-break-inside:avoid; }
+                .o_main_table thead { display:table-header-group; }
+                .o_main_table th { background:#17365D !important; color:#fff !important; padding:7px 6px !important; border:1px solid #17365D !important; }
+                .o_main_table td { padding:6px !important; border-bottom:1px solid #DCE3EC !important; vertical-align:top; }
+                .o_main_table tbody tr:nth-child(even) { background:#F5F8FC; }
+            </style>
+        </xpath>
+    </template>
+
+</odoo>

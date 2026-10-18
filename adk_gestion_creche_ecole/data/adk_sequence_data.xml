@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+
+        <record id="seq_adk_eleve" model="ir.sequence">
+            <field name="name">ADK - Matricule Élève</field>
+            <field name="code">adk.eleve</field>
+            <field name="prefix">ELV-%(year)s-</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <record id="seq_adk_badge" model="ir.sequence">
+            <field name="name">ADK - Référence Badge</field>
+            <field name="code">adk.badge</field>
+            <field name="prefix">BDG-%(year)s-</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+    </data>
+</odoo>

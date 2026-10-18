@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_adk_livre_list" model="ir.ui.view">
+        <field name="name">adk.livre.list</field>
+        <field name="model">adk.livre</field>
+        <field name="arch" type="xml">
+            <list string="Livres">
+                <field name="name"/>
+                <field name="auteur"/>
+                <field name="categorie"/>
+                <field name="code_barre"/>
+                <field name="nb_exemplaires"/>
+                <field name="nb_exemplaires_disponibles"/>
+                <field name="statut_global" widget="badge"
+                       decoration-success="statut_global=='disponible'"
+                       decoration-danger="statut_global=='emprunte'"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_adk_livre_form" model="ir.ui.view">
+        <field name="name">adk.livre.form</field>
+        <field name="model">adk.livre</field>
+        <field name="arch" type="xml">
+            <form string="Livre">
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="name" placeholder="Titre du livre"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="auteur"/>
+                            <field name="editeur"/>
+                            <field name="isbn"/>
+                            <field name="code_barre" widget="barcode_handler"/>
+                            <field name="categorie"/>
+                        </group>
+                        <group>
+                            <field name="etablissement_id"/>
+                            <field name="nb_exemplaires"/>
+                            <field name="nb_exemplaires_disponibles"/>
+                            <field name="statut_global"/>
+                        </group>
+                    </group>
+                    <field name="pret_ids">
+                        <list>
+                            <field name="eleve_id"/>
+                            <field name="employee_id"/>
+                            <field name="date_emprunt"/>
+                            <field name="date_retour_prevue"/>
+                            <field name="statut"/>
+                        </list>
+                    </field>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_adk_livre" model="ir.actions.act_window">
+        <field name="name">Bibliothèque - Livres</field>
+        <field name="res_model">adk.livre</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+</odoo>

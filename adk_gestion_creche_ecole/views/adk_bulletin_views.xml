@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_adk_bulletin_list" model="ir.ui.view">
+        <field name="name">adk.bulletin.list</field>
+        <field name="model">adk.bulletin</field>
+        <field name="arch" type="xml">
+            <list string="Bulletins" decoration-muted="etat=='brouillon'" decoration-success="etat=='envoye'">
+                <field name="eleve_id"/>
+                <field name="classe_id"/>
+                <field name="periode_id"/>
+                <field name="moyenne_generale"/>
+                <field name="moyenne_classe"/>
+                <field name="rang"/>
+                <field name="etat"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_adk_bulletin_form" model="ir.ui.view">
+        <field name="name">adk.bulletin.form</field>
+        <field name="model">adk.bulletin</field>
+        <field name="arch" type="xml">
+            <form string="Bulletin de notes">
+                <header>
+                    <button name="action_generer_lignes_depuis_notes" type="object"
+                            string="Recalculer depuis les notes" class="btn-secondary"/>
+                    <button name="action_valider" type="object" string="Valider"
+                            class="btn-primary" invisible="etat != 'brouillon'"/>
+                    <button name="action_envoyer_parents" type="object" string="Envoyer aux parents"
+                            class="btn-primary" invisible="etat != 'valide'"/>
+                    <field name="etat" widget="statusbar" statusbar_visible="brouillon,valide,envoye"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="display_name" readonly="1"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="eleve_id"/>
+                            <field name="classe_id" readonly="1"/>
+                            <field name="etablissement_id" readonly="1"/>
+                            <field name="periode_id"/>
+                            <field name="date_edition"/>
+                        </group>
+                        <group>
+                            <field name="moyenne_generale"/>
+                            <field name="moyenne_classe"/>
+                            <field name="note_max_classe"/>
+                            <field name="note_min_classe"/>
+                            <field name="rang"/>
+                        </group>
+                    </group>
+                    <field name="ligne_ids">
+                        <list editable="bottom">
+                            <field name="matiere_id"/>
+                            <field name="coefficient"/>
+                            <field name="moyenne_ponderee"/>
+                            <field name="enseignant_id"/>
+                            <field name="appreciation"/>
+                        </list>
+                    </field>
+                    <group string="Avis global">
+                        <field name="appreciation_generale" nolabel="1"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_adk_bulletin_search" model="ir.ui.view">
+        <field name="name">adk.bulletin.search</field>
+        <field name="model">adk.bulletin</field>
+        <field name="arch" type="xml">
+            <search string="Rechercher un bulletin">
+                <field name="eleve_id"/>
+                <field name="classe_id"/>
+                <group expand="0" string="Regrouper par">
+                    <filter string="Classe" name="groupby_classe" context="{'group_by':'classe_id'}"/>
+                    <filter string="Période" name="groupby_periode" context="{'group_by':'periode_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_adk_bulletin" model="ir.actions.act_window">
+        <field name="name">Bulletins de notes</field>
+        <field name="res_model">adk.bulletin</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+</odoo>
