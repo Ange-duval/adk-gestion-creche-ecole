@@ -18,7 +18,7 @@ ADK Gestion Crèche & École pour Odoo 18
 * 8 rapports PDF de direction : historique élève, recettes, synthèse, impayés,
   par grille tarifaire, journal des encaissements, effectifs, bilan annuel
 """,
-    'author': "ANGE DUVAL KAMBEU",
+    'author': "Kambeu Henang Ange Duval",
     'maintainer': "Kambeu Henang Ange Duval",
     'support': "duvalkambeu61@gmail.com",
     'license': 'OPL-1',
