@@ -6,7 +6,7 @@
             <field name="name">ADK - Notification d'absence élève</field>
             <field name="model_id" ref="model_adk_presence"/>
             <field name="subject">Absence de {{ object.eleve_id.name }} le {{ object.date }}</field>
-            <field name="email_to">{{ ','.join(object.eleve_id.parent_ids.mapped('email') or []) }}</field>
+            <field name="email_to">{{ ','.join(object.eleve_id.parent_ids.filtered('email').mapped('email')) }}</field>
             <field name="body_html" type="html">
                 <div style="font-family: sans-serif;">
                     <p>Bonjour,</p>
@@ -25,7 +25,7 @@
             <field name="name">ADK - Envoi du bulletin de notes</field>
             <field name="model_id" ref="model_adk_bulletin"/>
             <field name="subject">Bulletin de notes de {{ object.eleve_id.name }}</field>
-            <field name="email_to">{{ ','.join(object.eleve_id.parent_ids.mapped('email') or []) }}</field>
+            <field name="email_to">{{ ','.join(object.eleve_id.parent_ids.filtered('email').mapped('email')) }}</field>
             <field name="report_template_ids" eval="[(4, ref('action_report_bulletin'))]"/>
             <field name="body_html" type="html">
                 <div style="font-family: sans-serif;">

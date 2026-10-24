@@ -36,11 +36,11 @@
                         <table class="table table-bordered table-sm">
                             <thead style="background-color:#1A3C6E; color:white;">
                                 <tr>
-                                    <th>Matière</th>
-                                    <th class="text-center">Coefficient</th>
-                                    <th class="text-center">Moyenne /20</th>
-                                    <th>Enseignant</th>
-                                    <th>Appréciation</th>
+                                    <th style="color:white;">Matière</th>
+                                    <th class="text-center" style="color:white;">Coefficient</th>
+                                    <th class="text-center" style="color:white;">Moyenne /20</th>
+                                    <th style="color:white;">Enseignant</th>
+                                    <th style="color:white;">Appréciation</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -57,19 +57,19 @@
                         <table class="table table-sm" style="width:60%; margin-left:auto; margin-top:16px;">
                             <tr>
                                 <td><strong>Moyenne de l'élève</strong></td>
-                                <td class="text-end"><span t-field="o.moyenne_generale"/> / 20</td>
+                                <td class="text-end"><span t-out="round(o.moyenne_generale, 2)"/> / 20</td>
                             </tr>
                             <tr>
                                 <td><strong>Moyenne de la classe</strong></td>
-                                <td class="text-end"><span t-field="o.moyenne_classe"/> / 20</td>
+                                <td class="text-end"><span t-out="round(o.moyenne_classe, 2)"/> / 20</td>
                             </tr>
                             <tr>
                                 <td><strong>Note la plus haute</strong></td>
-                                <td class="text-end"><span t-field="o.note_max_classe"/> / 20</td>
+                                <td class="text-end"><span t-out="round(o.note_max_classe, 2)"/> / 20</td>
                             </tr>
                             <tr>
                                 <td><strong>Note la plus basse</strong></td>
-                                <td class="text-end"><span t-field="o.note_min_classe"/> / 20</td>
+                                <td class="text-end"><span t-out="round(o.note_min_classe, 2)"/> / 20</td>
                             </tr>
                             <tr>
                                 <td><strong>Rang dans la classe</strong></td>

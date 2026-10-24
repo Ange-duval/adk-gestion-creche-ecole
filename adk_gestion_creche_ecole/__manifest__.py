@@ -1,28 +1,29 @@
 # -*- coding: utf-8 -*-
 {
     'name': "ADK Gestion Crèche & École",
-    'version': '18.0.1.2.0',
+    'version': '18.0.1.2.1',
     'category': 'Education',
     'summary': "Gestion complète d'une crèche ou d'une école : élèves, classes, emplois du temps, "
                "bulletins, badges QR, facturation de la scolarité, paiements et rapports de direction",
     'description': """
-ADK Gestion Crèche & École pour Odoo 18
-=======================================
+ADK Gestion Crèche et École pour Odoo 18
+========================================
+
 * Infrastructure : Établissement > Bâtiment > Étage > Salle
-* Classes, matières, sessions de cours, emplois du temps avec anti-conflits
+* Classes, matières, sessions de cours, emplois du temps anti-conflits
 * Élèves, parents (portail), enseignants, intendants, bibliothécaires
 * Présences par badge QR, notes, bulletins PDF
 * Bibliothèque, librairie, badges d'accès CR80
-* Facturation de la scolarité : grilles tarifaires, dossier de scolarité par élève,
-  facture et paiements par tranches jusqu'à solde zéro, reportés dans la comptabilité Odoo
-* 8 rapports PDF de direction : historique élève, recettes, synthèse, impayés,
-  par grille tarifaire, journal des encaissements, effectifs, bilan annuel
+* Facturation de la scolarité : grilles tarifaires, dossier par élève, facture
+  et paiements par tranches jusqu'à solde zéro, reportés dans la comptabilité
+* 8 rapports PDF de direction
 """,
     'author': "Kambeu Henang Ange Duval",
     'maintainer': "Kambeu Henang Ange Duval",
     'support': "duvalkambeu61@gmail.com",
     'license': 'OPL-1',
-    'price': 39.0,
+    # Offre de lancement : gratuit. Pour passer en payant, remplacer par 'price': 39.0
+    'price': 0.0,
     'currency': 'EUR',
     'depends': [
         'base',
